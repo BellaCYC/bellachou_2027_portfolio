@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yuan-Chen (Bella) Chou - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #faf9f6; color: #2d3748; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px; }
+        @media (max-width: 768px) { .chart-container { height: 250px; } }
+        .glass-panel { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <nav class="fixed top-0 w-full z-50 glass-panel shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <a href="index.html" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-white font-bold text-sm">BC</a>
+                    <a href="index.html" class="font-semibold text-lg tracking-tight text-slate-800">Bella Chou Portfolio</a>
+                </div>
+                <div class="flex space-x-2 md:space-x-6">
+                    <a href="index.html" class="text-slate-500 hover:text-slate-900 px-2 py-2 text-xs md:text-sm font-medium transition-all">Home</a>
+                    <a href="dashboard.html" class="text-slate-800 border-b-2 border-slate-800 px-2 py-2 text-xs md:text-sm font-medium transition-all">Dashboard</a>
+                    <a href="profile.html" class="text-slate-500 hover:text-slate-900 px-2 py-2 text-xs md:text-sm font-medium transition-all">Profile</a>
+                    <a href="stories.html" class="text-slate-500 hover:text-slate-900 px-2 py-2 text-xs md:text-sm font-medium transition-all">Stories Behind</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+
+        <header class="text-center max-w-3xl mx-auto space-y-4">
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-slate-900">Extracurricular Impact Report</h1>
+            <p class="text-lg text-slate-600">A comprehensive, interactive analysis of academic research, clinical engineering, and community leadership initiatives. Interact with the charts to explore hourly metrics and domain dynamics.</p>
+        </header>
+
+        <section id="overview" class="space-y-6 scroll-mt-24">
+            <div class="space-y-2">
+                <h2 class="text-2xl font-bold text-slate-800 border-b border-slate-200 pb-2">Strategic Overview & Analytics</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="glass-panel p-6 rounded-2xl shadow-sm flex flex-col justify-between">
+                    <h3 class="text-lg font-semibold text-slate-800 mb-2">Total Time Allocation by Domain</h3>
+                    <p class="text-sm text-slate-500 mb-6">Distribution of cumulative hours across all reported activities.</p>
+                    <div class="chart-container">
+                        <canvas id="timeDistributionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl shadow-sm flex flex-col justify-between">
+                    <h3 class="text-lg font-semibold text-slate-800 mb-2">Leadership vs. Participation</h3>
+                    <p class="text-sm text-slate-500 mb-6">Comparing activities where a leadership role was held versus general membership.</p>
+                    <div class="chart-container">
+                        <canvas id="leadershipChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="exploration" class="space-y-6 scroll-mt-24">
+            <div class="space-y-2">
+                <h2 class="text-2xl font-bold text-slate-800 border-b border-slate-200 pb-2">Detailed Exploration Directory</h2>
+            </div>
+
+            <div class="flex flex-wrap gap-2 justify-center py-4 sticky top-16 z-40 bg-[#faf9f6]/90 backdrop-blur-md pb-4 border-b border-slate-200" id="filter-container">
+                <button onclick="filterData('All')" class="filter-btn active px-4 py-2 rounded-full text-sm font-medium bg-slate-800 text-white transition-all shadow-md">All Initiatives</button>
+                <button onclick="filterData('Academics')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">Academics</button>
+                <button onclick="filterData('Volunteering')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">Volunteering</button>
+                <button onclick="filterData('Internships')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">Internships & Jobs</button>
+                <button onclick="filterData('Certificates')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">Certificates & Awards</button>
+                <button onclick="filterData('Clubs')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">Clubs & Orgs</button>
+            </div>
+
+            <div id="activity-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pt-4">
+            </div>
+        </section>
+
+    </main>
+
+    <div id="detail-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transform scale-95 transition-transform duration-300 hide-scroll relative" id="modal-content-wrapper">
+            <div class="sticky top-0 right-0 p-4 flex justify-end bg-gradient-to-b from-white to-transparent">
+                <button onclick="closeModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full w-8 h-8 flex items-center justify-center font-bold transition-colors">X</button>
+            </div>
+            <div class="px-8 pb-8 pt-2" id="modal-body">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const rawData = [
+            { category: 'Volunteering', title: 'Infinitas', time: '2 Hours/Week, 52 Weeks/Year', leadership: true, desc: 'Dedicated to empowering underserved or remote students, provides tailored one-on-one online education. The network of 650+ volunteers across 200+ schools has delivered more than 1,600 hours of instruction.' },
+            { category: 'Volunteering', title: 'WEGO For Farmers', time: '1 Hour/Week, 52 Weeks/Year', leadership: false, desc: 'To bridge the gap between traditional agriculture and modern e-commerce. Over four years, collaborated with 24 local farmers to design and execute social media strategies, successfully increasing brand presence.' },
+            { category: 'Volunteering', title: 'Cocoa & Hearth', time: '1 Hour/Week, 52 Weeks/Year', leadership: false, desc: 'Founded a student-led non-profit to combat social isolation in Taiwan\'s aging population. Orchestrated campus-wide fundraising and bake sales, donating 100% of proceeds to local nursing homes to provide care.' },
+            { category: 'Volunteering', title: 'ACT Studio', time: '1 Hour/Week, 40 Weeks/Year', leadership: false, desc: 'Provided yearlong, 1-on-1 social studies instruction for underprivileged students in rural Taiwan; focused on closing the educational gap, widen students\' global horizon and fostering long-term academic growth.' },
+            { category: 'Volunteering', title: 'Scratch Teaching Program', time: '2 Hours/Week, 40 Weeks/Year', leadership: true, desc: 'Developed and delivered a multi-year introductory basic computer language curriculum for 10+ elementary students using the Scratch visual programming interface.' },
+            { category: 'Clubs', title: 'WEGO School Magazine Club', time: '2 Hours/Week, 40 Weeks/Year', leadership: true, desc: 'Directed promotional strategies for school-wide events through the official campus publication. Facilitated cross-departmental communication.' },
+            { category: 'Volunteering', title: 'Dental Post-Operative Patient Care', time: '2 Hours/Week, 52 Weeks/Year', leadership: true, desc: 'Collaborated with a dental surgical clinic to engineer a specialized web platform for post-operative patient care (implantology and orthodontics).' },
+            { category: 'Academics', title: 'MedInfo 2025 International Paper', time: '2 Hours/Week, 40 Weeks/Year', leadership: true, desc: 'Engineered Large Language Model (LLM) architectures for automated middle ear disease diagnosis, resulting in a co-authored, PubMed-indexed study.' },
+            { category: 'Academics', title: 'MedInfo 2025 International Research', time: '2 Hours/Week, 40 Weeks/Year', leadership: true, desc: 'Developed a deep learning-based ECG classification system to automate cardiac signal analysis and detection of arrhythmias.' },
+            { category: 'Academics', title: 'Clinical AI Research - Taipei VGH', time: '4 Hours/Week, 48 Weeks/Year', leadership: true, desc: 'Collaborated with the ENT medical team at Taipei VGH to engineer Large Language Model (LLM) architectures for the automated detection and diagnosis of middle ear diseases.' },
+            { category: 'Academics', title: 'Clinical AI Research - Cardiovascular', time: '4 Hours/Week, 48 Weeks/Year', leadership: true, desc: 'Collaborated with the research team at Taipei Veterans General Hospital to engineer and validate deep learning-based models for automated ECG classification.' },
+            { category: 'Academics', title: 'NYCU Gifted Talent Program: Art', time: '2 Hours/Week, 13 Weeks/Year', leadership: false, desc: 'Selected for the National Yang Ming Chiao Tung University (NYCU) Gifted Talent Program. Achieved a Top 3 ranking in the Art track.' },
+            { category: 'Academics', title: 'NYCU Gifted Program: Medicine', time: '2 Hours/Week, 13 Weeks/Year', leadership: false, desc: 'Completed advanced collegiate-level coursework in "Medicine and Bacteria" within the NYCU Gifted Talent Program. Explored microbial pathogenesis.' },
+            { category: 'Academics', title: 'NYCU Gifted Program: Social Psych', time: '2 Hours/Week, 13 Weeks/Year', leadership: false, desc: 'Ranked in the Top 10% of the "Social Psychology" course track at NYCU. Investigated human behavior, group dynamics, and cognitive biases.' },
+            { category: 'Academics', title: 'NYCU Gifted Program: Virology', time: '2 Hours/Week, 13 Weeks/Year', leadership: false, desc: 'Pursued advanced studies in "Virology and Human Life," focusing on viral structure, replication cycles, and their socio-economic impact on global health.' },
+            { category: 'Certificates', title: 'National Finalist: 2025 Smart', time: '4 Hours/Week, 20 Weeks/Year', leadership: false, desc: 'Selected as a National Finalist in the 2025 Smart Innovation Application Awards, organized by Chunghwa Telecom. As a member of the "Med GenAI" team.' },
+            { category: 'Academics', title: 'Meta-Analysis Journal: Digitizing', time: '4 Hours/Week, 35 Weeks/Year', leadership: true, desc: 'Conducted a comprehensive systematic meta-analysis of global audiological research to identify key diagnostic markers for hearing loss.' },
+            { category: 'Internships', title: 'Clinical Research: Palpebral', time: '8 Hours/Week, 40 Weeks/Year', leadership: false, desc: 'Currently spearheading clinical data collection at Taipei Veterans General Hospital (VGH) to construct a novel palpebral (eyelid) microcirculation database.' },
+            { category: 'Internships', title: 'Smart Ring Health Monitoring', time: '3 Hours/Week, 40 Weeks/Year', leadership: false, desc: 'Developed a high-fidelity Android application designed as the primary user interface for a continuous, wearable health-monitoring platform. Engineered low-latency synchronization.' },
+            { category: 'Internships', title: '3D Virtual Rehabilitation Inter', time: '3 Hours/Week, 30 Weeks/Year', leadership: false, desc: 'Constructing 3D virtual rehabilitation models to assist orthopedic and rehabilitation patients in understanding/learning/becoming familiar with rehabilitation movements.' },
+            { category: 'Certificates', title: 'USACO (USA Computing Olympiad)', time: '2 Hours/Week, 30 Weeks/Year', leadership: false, desc: 'Advanced to the Gold Division of the USA Computing Olympiad, scoring 1000/1000 in the Silver division to earn an accelerated promotion.' },
+            { category: 'Certificates', title: 'USABO (USA Biology Olympiad)', time: '2 Hours/Week, 30 Weeks/Year', leadership: false, desc: 'Recognized as a National Semifinalist in the USA Biology Olympiad, achieving a high-distinction score of 41/50. Top 1% of high school biology students.' },
+            { category: 'Certificates', title: 'AMC 12 (American Mathematics)', time: '2 Hours/Week, 30 Weeks/Year', leadership: false, desc: 'Achieved a Top 5% national ranking in the AMC 12, selected for the AIME (American Invitational Mathematics Examination).' },
+            { category: 'Volunteering', title: 'YTP (Young Turing Program)', time: '3 Hours/Week, 12 Weeks/Year', leadership: true, desc: 'Organizing with a team of peers to explore advanced YTP-style problem-solving techniques and dealing with lots of challenging problems.' }
+        ];
+
+        let state = {
+            currentFilter: 'All',
+            chartInstances: {}
+        };
+
+        const themeColors = {
+            Academics: '#3b82f6',
+            Volunteering: '#10b981',
+            Internships: '#f59e0b',
+            Certificates: '#8b5cf6',
+            Clubs: '#ef4444'
+        };
+
+        function calculateHours(timeString) {
+            const match = timeString.match(/(\d+)\s*Hours?\/Week,\s*(\d+)\s*Weeks?\/Year/i);
+            if (match) {
+                return parseInt(match[1]) * parseInt(match[2]);
+            }
+            return 0;
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('activity-grid');
+            grid.innerHTML = '';
+
+            const filteredData = state.currentFilter === 'All' 
+                ? rawData 
+                : rawData.filter(item => item.category === state.currentFilter);
+
+            filteredData.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'glass-panel rounded-2xl p-6 flex flex-col h-full transform transition-all duration-300 hover:-translate-y-1 hover:shadow-lg border-t-4';
+                card.style.borderTopColor = themeColors[item.category];
+                
+                let leadershipBadge = item.leadership 
+                    ? `<span class="inline-block px-2 py-1 bg-slate-800 text-white text-xs font-bold rounded-md mb-3">Leadership Role</span>`
+                    : `<span class="inline-block px-2 py-1 bg-slate-100 text-slate-500 text-xs font-medium rounded-md mb-3">Member / Participant</span>`;
+
+                card.innerHTML = `
+                    <div class="flex-grow">
+                        <div class="text-xs font-bold uppercase tracking-wider mb-2" style="color: ${themeColors[item.category]}">${item.category}</div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 leading-tight">${item.title}</h3>
+                        ${leadershipBadge}
+                        <div class="text-sm font-medium text-slate-600 mb-4 flex items-center gap-1 border-b border-slate-100 pb-3">
+                            <span class="text-slate-400">Duration:</span> ${item.time}
+                        </div>
+                        <p class="text-slate-600 text-sm line-clamp-3 mb-6">${item.desc}</p>
+                    </div>
+                    <button onclick="openModal(${index})" class="w-full py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-medium text-sm transition-colors mt-auto">
+                        View Details
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterData(category) {
+            state.currentFilter = category;
+            
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                if (btn.innerText.includes(category) || (category === 'All' && btn.innerText === 'All Initiatives')) {
+                    btn.className = 'filter-btn active px-4 py-2 rounded-full text-sm font-medium bg-slate-800 text-white transition-all shadow-md';
+                } else {
+                    btn.className = 'filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all';
+                }
+            });
+
+            const grid = document.getElementById('activity-grid');
+            grid.style.opacity = '0';
+            setTimeout(() => {
+                renderGrid();
+                grid.style.opacity = '1';
+                grid.style.transition = 'opacity 0.3s ease-in-out';
+            }, 200);
+        }
+
+        function openModal(index) {
+            const item = rawData[index];
+            const modal = document.getElementById('detail-modal');
+            const modalBody = document.getElementById('modal-body');
+            const wrapper = document.getElementById('modal-content-wrapper');
+
+            const totalHours = calculateHours(item.time);
+
+            modalBody.innerHTML = `
+                <div class="text-xs font-bold uppercase tracking-wider mb-2" style="color: ${themeColors[item.category]}">${item.category}</div>
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-4 leading-tight">${item.title}</h2>
+                
+                <div class="flex flex-wrap gap-3 mb-6 border-b border-slate-100 pb-6">
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 flex-1 min-w-[150px]">
+                        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Commitment</div>
+                        <div class="font-semibold text-slate-800 text-sm">${item.time}</div>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 flex-1 min-w-[150px]">
+                        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Total Estimated Hours</div>
+                        <div class="font-bold text-slate-800 text-lg">${totalHours > 0 ? totalHours + ' Hrs' : 'Varies'}</div>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 flex-1 min-w-[150px]">
+                        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Role Type</div>
+                        <div class="font-semibold text-slate-800 text-sm">${item.leadership ? 'Leadership Position' : 'Participant / Member'}</div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h4 class="font-bold text-slate-900 text-lg">Initiative Details</h4>
+                    <p class="text-slate-700 leading-relaxed text-justify">${item.desc}</p>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                wrapper.classList.remove('scale-95');
+                wrapper.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('detail-modal');
+            const wrapper = document.getElementById('modal-content-wrapper');
+            
+            modal.classList.add('opacity-0');
+            wrapper.classList.remove('scale-100');
+            wrapper.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function renderCharts() {
+            const catTotals = { Academics: 0, Volunteering: 0, Internships: 0, Certificates: 0, Clubs: 0 };
+            let leadershipCount = 0;
+            let participantCount = 0;
+
+            rawData.forEach(item => {
+                catTotals[item.category] += calculateHours(item.time);
+                if (item.leadership) leadershipCount++;
+                else participantCount++;
+            });
+
+            const timeCtx = document.getElementById('timeDistributionChart').getContext('2d');
+            state.chartInstances.time = new Chart(timeCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(catTotals),
+                    datasets: [{
+                        data: Object.values(catTotals),
+                        backgroundColor: [themeColors.Academics, themeColors.Volunteering, themeColors.Internships, themeColors.Certificates, themeColors.Clubs],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: { position: 'right', labels: { font: { family: 'Inter', size: 12 }, usePointStyle: true, padding: 20 } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) { return ` ${context.label}: ${context.raw} Hours`; }
+                            },
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)', padding: 12, cornerRadius: 8, titleFont: { size: 14 }, bodyFont: { size: 13 }
+                        }
+                    }
+                }
+            });
+
+            const leadCtx = document.getElementById('leadershipChart').getContext('2d');
+            state.chartInstances.leadership = new Chart(leadCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Leadership Roles', 'Participant/Member Roles'],
+                    datasets: [{
+                        label: 'Number of Initiatives',
+                        data: [leadershipCount, participantCount],
+                        backgroundColor: ['#0f172a', '#94a3b8'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: { grid: { display: false }, ticks: { stepSize: 2, font: { family: 'Inter' } } },
+                        y: { grid: { display: false }, ticks: { font: { family: 'Inter', weight: '500' } } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)', padding: 12, cornerRadius: 8, bodyFont: { size: 13 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function initApp() {
+            renderGrid();
+            renderCharts();
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('detail-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
