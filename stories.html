@@ -64,30 +64,12 @@
 
     <script>
         const rawData = [
-            { category: 'Volunteering', title: 'Infinitas', time: '2 Hours/Week, 52 Weeks/Year', desc: 'Dedicated to empowering underserved or remote students, provides tailored one-on-one online education. The network of 650+ volunteers across 200+ schools has delivered more than 1,600 hours of instruction.' },
-            { category: 'Volunteering', title: 'WEGO For Farmers', time: '1 Hour/Week, 52 Weeks/Year', desc: 'To bridge the gap between traditional agriculture and modern e-commerce. Over four years, collaborated with 24 local farmers to design and execute social media strategies, successfully increasing brand presence.' },
-            { category: 'Volunteering', title: 'Cocoa & Hearth', time: '1 Hour/Week, 52 Weeks/Year', desc: 'Founded a student-led non-profit to combat social isolation in Taiwan\'s aging population. Orchestrated campus-wide fundraising and bake sales, donating 100% of proceeds to local nursing homes to provide care.' },
-            { category: 'Volunteering', title: 'ACT Studio', time: '1 Hour/Week, 40 Weeks/Year', desc: 'Provided yearlong, 1-on-1 social studies instruction for underprivileged students in rural Taiwan; focused on closing the educational gap, widen students\' global horizon and fostering long-term academic growth.' },
-            { category: 'Volunteering', title: 'Scratch Teaching Program', time: '2 Hours/Week, 40 Weeks/Year', desc: 'Developed and delivered a multi-year introductory basic computer language curriculum for 10+ elementary students using the Scratch visual programming interface.' },
-            { category: 'Clubs', title: 'WEGO School Magazine Club', time: '2 Hours/Week, 40 Weeks/Year', desc: 'Directed promotional strategies for school-wide events through the official campus publication. Facilitated cross-departmental communication.' },
-            { category: 'Volunteering', title: 'Dental Post-Operative Patient Care', time: '2 Hours/Week, 52 Weeks/Year', desc: 'Collaborated with a dental surgical clinic to engineer a specialized web platform for post-operative patient care (implantology and orthodontics).' },
-            { category: 'Academics', title: 'MedInfo 2025 International Paper', time: '2 Hours/Week, 40 Weeks/Year', desc: 'Engineered Large Language Model (LLM) architectures for automated middle ear disease diagnosis, resulting in a co-authored, PubMed-indexed study.' },
-            { category: 'Academics', title: 'MedInfo 2025 International Research', time: '2 Hours/Week, 40 Weeks/Year', desc: 'Developed a deep learning-based ECG classification system to automate cardiac signal analysis and detection of arrhythmias.' },
-            { category: 'Academics', title: 'Clinical AI Research - Taipei VGH', time: '4 Hours/Week, 48 Weeks/Year', desc: 'Collaborated with the ENT medical team at Taipei VGH to engineer Large Language Model (LLM) architectures for the automated detection and diagnosis of middle ear diseases.' },
-            { category: 'Academics', title: 'Clinical AI Research - Cardiovascular', time: '4 Hours/Week, 48 Weeks/Year', desc: 'Collaborated with the research team at Taipei Veterans General Hospital to engineer and validate deep learning-based models for automated ECG classification.' },
-            { category: 'Academics', title: 'NYCU Gifted Talent Program: Art', time: '2 Hours/Week, 13 Weeks/Year', desc: 'Selected for the National Yang Ming Chiao Tung University (NYCU) Gifted Talent Program. Achieved a Top 3 ranking in the Art track.' },
-            { category: 'Academics', title: 'NYCU Gifted Program: Medicine', time: '2 Hours/Week, 13 Weeks/Year', desc: 'Completed advanced collegiate-level coursework in "Medicine and Bacteria" within the NYCU Gifted Talent Program. Explored microbial pathogenesis.' },
-            { category: 'Academics', title: 'NYCU Gifted Program: Social Psych', time: '2 Hours/Week, 13 Weeks/Year', desc: 'Ranked in the Top 10% of the "Social Psychology" course track at NYCU. Investigated human behavior, group dynamics, and cognitive biases.' },
-            { category: 'Academics', title: 'NYCU Gifted Program: Virology', time: '2 Hours/Week, 13 Weeks/Year', desc: 'Pursued advanced studies in "Virology and Human Life," focusing on viral structure, replication cycles, and their socio-economic impact on global health.' },
-            { category: 'Certificates', title: 'National Finalist: 2025 Smart', time: '4 Hours/Week, 20 Weeks/Year', desc: 'Selected as a National Finalist in the 2025 Smart Innovation Application Awards, organized by Chunghwa Telecom. As a member of the "Med GenAI" team.' },
-            { category: 'Academics', title: 'Meta-Analysis Journal: Digitizing', time: '4 Hours/Week, 35 Weeks/Year', desc: 'Conducted a comprehensive systematic meta-analysis of global audiological research to identify key diagnostic markers for hearing loss.' },
-            { category: 'Internships', title: 'Clinical Research: Palpebral', time: '8 Hours/Week, 40 Weeks/Year', desc: 'Currently spearheading clinical data collection at Taipei Veterans General Hospital (VGH) to construct a novel palpebral (eyelid) microcirculation database.' },
-            { category: 'Internships', title: 'Smart Ring Health Monitoring', time: '3 Hours/Week, 40 Weeks/Year', desc: 'Developed a high-fidelity Android application designed as the primary user interface for a continuous, wearable health-monitoring platform. Engineered low-latency synchronization.' },
-            { category: 'Internships', title: '3D Virtual Rehabilitation Inter', time: '3 Hours/Week, 30 Weeks/Year', desc: 'Constructing 3D virtual rehabilitation models to assist orthopedic and rehabilitation patients in understanding/learning/becoming familiar with rehabilitation movements.' },
-            { category: 'Certificates', title: 'USACO (USA Computing Olympiad)', time: '2 Hours/Week, 30 Weeks/Year', desc: 'Advanced to the Gold Division of the USA Computing Olympiad, scoring 1000/1000 in the Silver division to earn an accelerated promotion.' },
-            { category: 'Certificates', title: 'USABO (USA Biology Olympiad)', time: '2 Hours/Week, 30 Weeks/Year', desc: 'Recognized as a National Semifinalist in the USA Biology Olympiad, achieving a high-distinction score of 41/50. Top 1% of high school biology students.' },
-            { category: 'Certificates', title: 'AMC 12 (American Mathematics)', time: '2 Hours/Week, 30 Weeks/Year', desc: 'Achieved a Top 5% national ranking in the AMC 12, selected for the AIME (American Invitational Mathematics Examination).' },
-            { category: 'Volunteering', title: 'YTP (Young Turing Program)', time: '3 Hours/Week, 12 Weeks/Year', desc: 'Organizing with a team of peers to explore advanced YTP-style problem-solving techniques and dealing with lots of challenging problems.' }
+            { category: 'Volunteering', title: 'Infinitas Online Tutoring Project', role: 'President', time: '3 Years (Grade 10 – Grade 12)', desc: 'Managed a student-led online platform that provides free, one-on-one academic tutoring to underprivileged and remote students. Handled scheduling, volunteer onboarding, and logistics for a network of over 650 student volunteers across 200 schools, delivering a total of 1,600+ instructional hours.' },
+            { category: 'Volunteering', title: 'WEGO For Farmers Project', role: 'Core Member (Social Media & Graphic Designer)', time: '4 Years (Grade 9 – Grade 12)', desc: 'Partnered with 24 local Taiwanese farmers to help them market their produce online. Designed social media posts, created digital promotional graphics, and helped manage online campaigns to make local agricultural products more visible to digital consumers.' },
+            { category: 'Volunteering', title: 'Cocoa & Hearth Student Charity', role: 'Co-Founder / Core Member (Member)', time: '2 Years (Grade 11 – Grade 12)', desc: 'Co-founded a student-led non-profit organization at WEGO to support vulnerable groups. We organize campus cookie bake sales and donate 100% of the proceeds to partner nursing homes to help combat elder isolation and promote intergenerational connection in Taiwan\'s aging society. Recently, we expanded our mission to local children\'s homes to provide companionship, mentorship, and emotional support to underserved children who lack stable family care.' },
+            { category: 'Academics', title: 'LLM-Based AI Development for Otolaryngology Diagnosis', role: 'Student Research Assistant / Co-Author (Member)', time: 'Completed by 2025', desc: 'Collaborated with the ENT medical team at Taipei Veterans General Hospital under Dr. Chu. Assisted with data preparation and testing of Large Language Models (LLMs) optimized to help doctors detect middle ear diseases. Earned a co-authorship on the resulting PubMed-indexed paper (PMID: 40776019) and presented a poster at MedInfo 2025.' },
+            { category: 'Academics', title: 'Palpebral Capillary Database for Ocular Disease AI Models', role: 'Student Researcher (Member)', time: 'Ongoing (Current)', desc: 'Assisting with clinical data collection at Taipei Veterans General Hospital. Using non-invasive imaging tools to take photos of palpebral capillaries (eyelid microcirculation) to build a new database that will eventually train AI models to spot early risks for glaucoma, cataracts, and macular degeneration.' },
+            { category: 'Engineering', title: 'Android HCI App Development for Wearable Smart Rings', role: 'Lead UI Designer & Programmer (Member)', time: 'High School', desc: 'Programmed an Android application frontend that syncs automatically with a wearable smart ring. Focused on Human-Computer Interaction (HCI) design choices to create a dark-mode layout that cleanly maps out real-time biometric and physiological data for users.' }
         ];
 
         let state = {
@@ -97,9 +79,7 @@
         const themeColors = {
             Academics: '#3b82f6',
             Volunteering: '#10b981',
-            Internships: '#f59e0b',
-            Certificates: '#8b5cf6',
-            Clubs: '#ef4444'
+            Engineering: '#f59e0b'
         };
 
         function renderStorySelectors() {
@@ -126,6 +106,13 @@
             const item = rawData[index];
             const pane = document.getElementById('story-display-pane');
             pane.style.opacity = '0';
+
+            // Mapping categories directly to professional neutral-tinted alert boxes
+            const categoryClasses = {
+                Academics: { bg: 'bg-blue-50/50', border: 'border-blue-500' },
+                Volunteering: { bg: 'bg-emerald-50/50', border: 'border-emerald-500' },
+                Engineering: { bg: 'bg-amber-50/50', border: 'border-amber-500' }
+            };
             
             setTimeout(() => {
                 pane.innerHTML = `
@@ -134,53 +121,24 @@
                         <div>
                             <span class="text-xs uppercase tracking-widest font-bold" style="color: ${themeColors[item.category]}">${item.category}</span>
                             <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">${item.title}</h2>
-                            <p class="text-sm text-slate-500 mt-2">Brief Summary: ${item.desc}</p>
+                            <p class="text-sm font-semibold text-slate-500 mt-2">Role: ${item.role} (${item.time})</p>
                         </div>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-slate-100 pt-6">
-                            
-                            <!-- Column 1: Core Motivations -->
-                            <div class="space-y-3">
-                                <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">1. Core Motivations</h4>
-                                <div class="p-4 bg-amber-50/50 border-l-4 border-amber-500 rounded-r-lg min-h-[140px]">
-                                    <p class="text-xs font-semibold text-amber-800 uppercase tracking-wider mb-2">[Insert Your Personal spark or motivation text here]</p>
-                                    <p class="text-sm text-slate-600 leading-relaxed text-justify">
-                                        Use this dedicated section to describe what initially drove you to join or lead this activity. Detail the issues or community needs you recognized, and the goals you set out to achieve.
-                                    </p>
-                                </div>
-                            </div>
-                            
-                            <!-- Column 2: Effort & Chronology -->
-                            <div class="space-y-3">
-                                <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">2. Development & Milestones</h4>
-                                <div class="p-4 bg-emerald-50/50 border-l-4 border-emerald-500 rounded-r-lg min-h-[140px]">
-                                    <p class="text-xs font-semibold text-emerald-800 uppercase tracking-wider mb-2">[Insert Timeline, Effort & Milestones]</p>
-                                    <p class="text-sm text-slate-600 leading-relaxed text-justify">
-                                        Track the effort you invested over time. Mention specific milestones, project developments, or technical boundaries you successfully expanded.
-                                    </p>
-                                </div>
-                            </div>
-
+                        <!-- Categorized Summary Accent Block -->
+                        <div class="p-5 rounded-2xl border-l-4 ${categoryClasses[item.category].bg} ${categoryClasses[item.category].border}">
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Brief Summary</h4>
+                            <p class="text-sm text-slate-700 leading-relaxed text-justify">
+                                ${item.desc}
+                            </p>
                         </div>
 
                         <!-- Photographic Documentation Sandbox Area -->
                         <div class="space-y-3 pt-4 border-t border-slate-100">
-                            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">3. Photographic Documentation</h4>
-                            <div class="w-full min-h-[220px] bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center p-6 text-center">
-                                <div class="text-slate-400 text-2xl font-semibold mb-2">[Insert Activity Photo Showcase]</div>
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">Photographic Documentation</h4>
+                            <div class="w-full min-h-[260px] bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center p-6 text-center">
+                                <div class="text-slate-400 text-lg font-semibold mb-2">Activity Photo Showcase</div>
                                 <p class="text-xs text-slate-500 max-w-md leading-relaxed">
                                     Replace this layout card with photos documenting your workshops, coding screens, certificates, field visits, or team collaborative actions.
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Final Reflections and Learnings -->
-                        <div class="space-y-3 pt-4 border-t border-slate-100">
-                            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">4. Reflection & Key Learnings</h4>
-                            <div class="p-5 bg-slate-100/50 rounded-2xl min-h-[120px]">
-                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">[Insert Personal Growth & Strategic Reflections]</p>
-                                <p class="text-sm text-slate-600 leading-relaxed text-justify">
-                                    Describe your personal development during this program. Detail key lessons learned in cross-departmental coordination, computational model engineering, or direct medical-partnership validation.
                                 </p>
                             </div>
                         </div>

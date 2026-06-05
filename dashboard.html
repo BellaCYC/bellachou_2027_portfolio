@@ -75,9 +75,10 @@
                 <button onclick="filterData('All')" class="filter-btn active px-4 py-2 rounded-full text-sm font-medium bg-slate-800 text-white transition-all shadow-md">All Initiatives</button>
                 <button onclick="filterData('Academics')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">Academics</button>
                 <button onclick="filterData('Volunteering')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">Volunteering</button>
-                <button onclick="filterData('Internships')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">Internships & Jobs</button>
-                <button onclick="filterData('Certificates')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">Certificates & Awards</button>
-                <button onclick="filterData('Clubs')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">Clubs & Orgs</button>
+                <button onclick="filterData('Engineering')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">Engineering</button>
+                <button onclick="filterData('Internships')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">Internships</button>
+                <button onclick="filterData('Clubs')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">Clubs</button>
+                <button onclick="filterData('Competitions')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">Competitions</button>
             </div>
 
             <div id="activity-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pt-4">
@@ -98,30 +99,26 @@
 
     <script>
         const rawData = [
-            { category: 'Volunteering', title: 'Infinitas', time: '2 Hours/Week, 52 Weeks/Year', leadership: true, desc: 'Dedicated to empowering underserved or remote students, provides tailored one-on-one online education. The network of 650+ volunteers across 200+ schools has delivered more than 1,600 hours of instruction.' },
-            { category: 'Volunteering', title: 'WEGO For Farmers', time: '1 Hour/Week, 52 Weeks/Year', leadership: false, desc: 'To bridge the gap between traditional agriculture and modern e-commerce. Over four years, collaborated with 24 local farmers to design and execute social media strategies, successfully increasing brand presence.' },
-            { category: 'Volunteering', title: 'Cocoa & Hearth', time: '1 Hour/Week, 52 Weeks/Year', leadership: false, desc: 'Founded a student-led non-profit to combat social isolation in Taiwan\'s aging population. Orchestrated campus-wide fundraising and bake sales, donating 100% of proceeds to local nursing homes to provide care.' },
-            { category: 'Volunteering', title: 'ACT Studio', time: '1 Hour/Week, 40 Weeks/Year', leadership: false, desc: 'Provided yearlong, 1-on-1 social studies instruction for underprivileged students in rural Taiwan; focused on closing the educational gap, widen students\' global horizon and fostering long-term academic growth.' },
-            { category: 'Volunteering', title: 'Scratch Teaching Program', time: '2 Hours/Week, 40 Weeks/Year', leadership: true, desc: 'Developed and delivered a multi-year introductory basic computer language curriculum for 10+ elementary students using the Scratch visual programming interface.' },
-            { category: 'Clubs', title: 'WEGO School Magazine Club', time: '2 Hours/Week, 40 Weeks/Year', leadership: true, desc: 'Directed promotional strategies for school-wide events through the official campus publication. Facilitated cross-departmental communication.' },
-            { category: 'Volunteering', title: 'Dental Post-Operative Patient Care', time: '2 Hours/Week, 52 Weeks/Year', leadership: true, desc: 'Collaborated with a dental surgical clinic to engineer a specialized web platform for post-operative patient care (implantology and orthodontics).' },
-            { category: 'Academics', title: 'MedInfo 2025 International Paper', time: '2 Hours/Week, 40 Weeks/Year', leadership: true, desc: 'Engineered Large Language Model (LLM) architectures for automated middle ear disease diagnosis, resulting in a co-authored, PubMed-indexed study.' },
-            { category: 'Academics', title: 'MedInfo 2025 International Research', time: '2 Hours/Week, 40 Weeks/Year', leadership: true, desc: 'Developed a deep learning-based ECG classification system to automate cardiac signal analysis and detection of arrhythmias.' },
-            { category: 'Academics', title: 'Clinical AI Research - Taipei VGH', time: '4 Hours/Week, 48 Weeks/Year', leadership: true, desc: 'Collaborated with the ENT medical team at Taipei VGH to engineer Large Language Model (LLM) architectures for the automated detection and diagnosis of middle ear diseases.' },
-            { category: 'Academics', title: 'Clinical AI Research - Cardiovascular', time: '4 Hours/Week, 48 Weeks/Year', leadership: true, desc: 'Collaborated with the research team at Taipei Veterans General Hospital to engineer and validate deep learning-based models for automated ECG classification.' },
-            { category: 'Academics', title: 'NYCU Gifted Talent Program: Art', time: '2 Hours/Week, 13 Weeks/Year', leadership: false, desc: 'Selected for the National Yang Ming Chiao Tung University (NYCU) Gifted Talent Program. Achieved a Top 3 ranking in the Art track.' },
-            { category: 'Academics', title: 'NYCU Gifted Program: Medicine', time: '2 Hours/Week, 13 Weeks/Year', leadership: false, desc: 'Completed advanced collegiate-level coursework in "Medicine and Bacteria" within the NYCU Gifted Talent Program. Explored microbial pathogenesis.' },
-            { category: 'Academics', title: 'NYCU Gifted Program: Social Psych', time: '2 Hours/Week, 13 Weeks/Year', leadership: false, desc: 'Ranked in the Top 10% of the "Social Psychology" course track at NYCU. Investigated human behavior, group dynamics, and cognitive biases.' },
-            { category: 'Academics', title: 'NYCU Gifted Program: Virology', time: '2 Hours/Week, 13 Weeks/Year', leadership: false, desc: 'Pursued advanced studies in "Virology and Human Life," focusing on viral structure, replication cycles, and their socio-economic impact on global health.' },
-            { category: 'Certificates', title: 'National Finalist: 2025 Smart', time: '4 Hours/Week, 20 Weeks/Year', leadership: false, desc: 'Selected as a National Finalist in the 2025 Smart Innovation Application Awards, organized by Chunghwa Telecom. As a member of the "Med GenAI" team.' },
-            { category: 'Academics', title: 'Meta-Analysis Journal: Digitizing', time: '4 Hours/Week, 35 Weeks/Year', leadership: true, desc: 'Conducted a comprehensive systematic meta-analysis of global audiological research to identify key diagnostic markers for hearing loss.' },
-            { category: 'Internships', title: 'Clinical Research: Palpebral', time: '8 Hours/Week, 40 Weeks/Year', leadership: false, desc: 'Currently spearheading clinical data collection at Taipei Veterans General Hospital (VGH) to construct a novel palpebral (eyelid) microcirculation database.' },
-            { category: 'Internships', title: 'Smart Ring Health Monitoring', time: '3 Hours/Week, 40 Weeks/Year', leadership: false, desc: 'Developed a high-fidelity Android application designed as the primary user interface for a continuous, wearable health-monitoring platform. Engineered low-latency synchronization.' },
-            { category: 'Internships', title: '3D Virtual Rehabilitation Inter', time: '3 Hours/Week, 30 Weeks/Year', leadership: false, desc: 'Constructing 3D virtual rehabilitation models to assist orthopedic and rehabilitation patients in understanding/learning/becoming familiar with rehabilitation movements.' },
-            { category: 'Certificates', title: 'USACO (USA Computing Olympiad)', time: '2 Hours/Week, 30 Weeks/Year', leadership: false, desc: 'Advanced to the Gold Division of the USA Computing Olympiad, scoring 1000/1000 in the Silver division to earn an accelerated promotion.' },
-            { category: 'Certificates', title: 'USABO (USA Biology Olympiad)', time: '2 Hours/Week, 30 Weeks/Year', leadership: false, desc: 'Recognized as a National Semifinalist in the USA Biology Olympiad, achieving a high-distinction score of 41/50. Top 1% of high school biology students.' },
-            { category: 'Certificates', title: 'AMC 12 (American Mathematics)', time: '2 Hours/Week, 30 Weeks/Year', leadership: false, desc: 'Achieved a Top 5% national ranking in the AMC 12, selected for the AIME (American Invitational Mathematics Examination).' },
-            { category: 'Volunteering', title: 'YTP (Young Turing Program)', time: '3 Hours/Week, 12 Weeks/Year', leadership: true, desc: 'Organizing with a team of peers to explore advanced YTP-style problem-solving techniques and dealing with lots of challenging problems.' }
+            { category: 'Volunteering', title: 'Infinitas Online Tutoring Project', role: 'President', time: '3 Years (Grade 10 – Grade 12)', hours: 312, leadership: true, desc: 'Managed a student-led online platform that provides free, one-on-one academic tutoring to underprivileged and remote students. Handled scheduling, volunteer onboarding, and logistics for a network of over 650 student volunteers across 200 schools, delivering a total of 1,600+ instructional hours.' },
+            { category: 'Volunteering', title: 'WEGO For Farmers Project', role: 'Core Member (Social Media & Graphic Designer)', time: '4 Years (Grade 9 – Grade 12)', hours: 208, leadership: false, desc: 'Partnered with 24 local Taiwanese farmers to help them market their produce online. Designed social media posts, created digital promotional graphics, and helped manage online campaigns to make local agricultural products more visible to digital consumers.' },
+            { category: 'Volunteering', title: 'Cocoa & Hearth Student Charity', role: 'Co-Founder / Core Member', time: '2 Years (Grade 11 – Grade 12)', hours: 104, leadership: false, desc: 'Co-founded a student-led non-profit organization at WEGO to support vulnerable groups. We organize campus cookie bake sales and donate 100% of the proceeds to partner nursing homes to help combat elder isolation and promote intergenerational connection in Taiwan\'s aging society. Recently, we expanded our mission to local children\'s homes to provide companionship, mentorship, and emotional support to underserved children who lack stable family care.' },
+            { category: 'Volunteering', title: 'ACT Studio', role: 'Volunteer Tutor', time: '1 Year (Grade 10)', hours: 40, leadership: false, desc: 'Provided yearlong, 1-on-1 social studies instruction for underprivileged students in rural Taiwan; focused on closing the educational gap, widen students’ global horizon and fostering long-term academic confidence.' },
+            { category: 'Volunteering', title: 'Introduction to Scratch Coding Class', role: 'Instructor', time: 'High School (10+ students taught)', hours: 80, leadership: true, desc: 'Planned and taught basic block-based programming lessons using Scratch to more than 10 elementary and middle school students to introduce them to basic computational thinking.' },
+            { category: 'Volunteering', title: 'Online Post-Op Consultation Assistant (Implants & Orthodontics)', role: 'Support Volunteer / Leader', time: 'High School', hours: 104, leadership: true, desc: 'Assisted with sorting and organizing incoming patient queries regarding post-operative dental care for implants and braces on an online consultation platform.' },
+            { category: 'Clubs', title: 'WEGO School Magazine Club', role: 'Club Officer / Strategy Coordinator', time: 'High School', hours: 80, leadership: true, desc: 'Planned promotional strategies for school events through the official campus magazine. Acted as a student liaison to communicate project plans with the school administration and ensure publication timelines were met.' },
+            { category: 'Academics', title: 'National Yang Ming Chiao Tung University (NYCU) Gifted Talent Enrichment Track', role: 'Selected High School Student', time: 'September 2024 – August 2025', hours: 250, leadership: false, desc: 'Selected into a highly competitive national university enrichment program for Taiwanese high school students. Completed collegiate-level modules: Medicine & Bacteria (Fall 2024), Virology (Spring 2025), and Social Psychology (Spring 2025), ranking in the top 10% of the class. Also completed an intensive AI and Deep Learning summer block (Summer 2025), finishing in the top 3 students.' },
+            { category: 'Academics', title: 'LLM-Based AI Development for Otolaryngology Diagnosis', role: 'Student Research Assistant / Co-Author', time: 'Completed by 2025', hours: 180, leadership: false, desc: 'Collaborated with the ENT medical team at Taipei Veterans General Hospital under Dr. Chu. Assisted with data preparation and testing of Large Language Models (LLMs) optimized to help doctors detect middle ear diseases. Earned a co-authorship on the resulting PubMed-indexed paper (PMID: 40776019) and presented a poster at MedInfo 2025.' },
+            { category: 'Academics', title: 'Deep Learning-Based ECG Signal Classification', role: 'Student Research Assistant / Poster Presenter', time: 'Presented August 2025', hours: 160, leadership: false, desc: 'Worked with Dr. Yuan-Chia\'s team at Taipei Veterans General Hospital to study deep learning architectures for automated cardiac signal analysis. Contributed to data preprocessing and presented the research findings as a poster at the MedInfo 2025 international conference.' },
+            { category: 'Academics', title: 'Palpebral Capillary Database for Ocular Disease AI Models', role: 'Student Researcher', time: 'Ongoing (Current)', hours: 320, leadership: false, desc: 'Assisting with clinical data collection at Taipei Veterans General Hospital. Using non-invasive imaging tools to take photos of palpebral capillaries (eyelid microcirculation) to build a new database that will eventually train AI models to spot early risks for glaucoma, cataracts, and macular degeneration.' },
+            { category: 'Academics', title: 'Systematic Meta-Analysis of Audiological Screening Tools', role: 'Independent Student Researcher', time: 'High School', hours: 140, leadership: false, desc: 'Conducted a structured meta-analysis of existing clinical audiology papers to evaluate methods for digital hearing screening. Used the data to plan the layout and logic for a mobile screening app aimed at reducing diagnostic bottlenecks for remote patients.' },
+            { category: 'Engineering', title: '2025 Smart Innovation Application Contest (Chunghwa Telecom)', role: 'Team Member (Team: Med GenAI)', time: 'Finalist round: October 9, 2025', hours: 100, leadership: false, desc: 'Co-developed a software prototype called HealLens, an AI-driven system designed to evaluate and interpret skin wounds. The project advanced to the national final round of the competition.' },
+            { category: 'Engineering', title: 'Android HCI App Development for Wearable Smart Rings', role: 'Lead UI Designer & Programmer', time: 'High School', hours: 150, leadership: false, desc: 'Programmed an Android application frontend that syncs automatically with a wearable smart ring. Focused on Human-Computer Interaction (HCI) design choices to create a dark-mode layout that cleanly maps out real-time biometric and physiological data for users.' },
+            { category: 'Engineering', title: '3D Instructional Motion Models for Orthopedic Rehabilitation', role: 'Developer', time: 'High School', hours: 120, leadership: false, desc: 'Partnered with a hospital Rehabilitation Department to build 3D virtual animation models. These digital models show precise physical therapy movements, helping orthopedic patients study and practice their prescribed exercises accurately at home.' },
+            { category: 'Internships', title: 'IT Department Student Intern', role: 'Summer Intern', time: 'High School', hours: 80, leadership: false, desc: 'Shadowed engineers and assisted with basic technical tasks within the Information Technology and Systems Department (資訊室) at Taipei Veterans General Hospital.' },
+            { category: 'Competitions', title: 'USACO Algorithmic Coding Competition', role: 'Competitor', time: 'High School', hours: 100, leadership: false, desc: 'Participated in the USA Computing Olympiad, solving complex algorithmic challenges and demonstrating robust logical execution, leading to promotion to the Gold Division.' },
+            { category: 'Competitions', title: 'USABO National Semifinals', role: 'Competitor', time: 'High School', hours: 120, leadership: false, desc: 'Competed in the USA Biology Olympiad, earning high marks and named a National Semifinalist with an official individual exam score of 41/50 (Top 1% of high school biology students).' },
+            { category: 'Competitions', title: 'AMC 12 Examination', role: 'Competitor', time: 'High School', hours: 80, leadership: false, desc: 'Completed the American Mathematics Competition 12, scoring in the top 5% nationwide, which successfully qualified for the American Invitational Mathematics Examination (AIME).' },
+            { category: 'Competitions', title: 'Taiwan Young Turing Program for Software Talent', role: 'Team Competitor', time: 'High School', hours: 50, leadership: true, desc: 'Represented as a team competitor in the prestigious Taiwan Young Turing Program (YTP) for Software Talent, participating in core programming contests and workshops.' }
         ];
 
         let state = {
@@ -132,18 +129,11 @@
         const themeColors = {
             Academics: '#3b82f6',
             Volunteering: '#10b981',
-            Internships: '#f59e0b',
-            Certificates: '#8b5cf6',
-            Clubs: '#ef4444'
+            Engineering: '#f59e0b',
+            Clubs: '#ef4444',
+            Internships: '#14b8a6',
+            Competitions: '#8b5cf6'
         };
-
-        function calculateHours(timeString) {
-            const match = timeString.match(/(\d+)\s*Hours?\/Week,\s*(\d+)\s*Weeks?\/Year/i);
-            if (match) {
-                return parseInt(match[1]) * parseInt(match[2]);
-            }
-            return 0;
-        }
 
         function renderGrid() {
             const grid = document.getElementById('activity-grid');
@@ -202,12 +192,11 @@
         }
 
         function openModal(index) {
+            // Re-find in active category or from rawData
             const item = rawData[index];
             const modal = document.getElementById('detail-modal');
             const modalBody = document.getElementById('modal-body');
             const wrapper = document.getElementById('modal-content-wrapper');
-
-            const totalHours = calculateHours(item.time);
 
             modalBody.innerHTML = `
                 <div class="text-xs font-bold uppercase tracking-wider mb-2" style="color: ${themeColors[item.category]}">${item.category}</div>
@@ -215,16 +204,16 @@
                 
                 <div class="flex flex-wrap gap-3 mb-6 border-b border-slate-100 pb-6">
                     <div class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 flex-1 min-w-[150px]">
-                        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Commitment</div>
+                        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Role</div>
+                        <div class="font-semibold text-slate-800 text-sm">${item.role}</div>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 flex-1 min-w-[150px]">
+                        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Duration</div>
                         <div class="font-semibold text-slate-800 text-sm">${item.time}</div>
                     </div>
                     <div class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 flex-1 min-w-[150px]">
-                        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Total Estimated Hours</div>
-                        <div class="font-bold text-slate-800 text-lg">${totalHours > 0 ? totalHours + ' Hrs' : 'Varies'}</div>
-                    </div>
-                    <div class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 flex-1 min-w-[150px]">
-                        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Role Type</div>
-                        <div class="font-semibold text-slate-800 text-sm">${item.leadership ? 'Leadership Position' : 'Participant / Member'}</div>
+                        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Relative Input Weight</div>
+                        <div class="font-bold text-slate-800 text-lg">${item.hours} Hours</div>
                     </div>
                 </div>
 
@@ -256,12 +245,12 @@
         }
 
         function renderCharts() {
-            const catTotals = { Academics: 0, Volunteering: 0, Internships: 0, Certificates: 0, Clubs: 0 };
+            const catTotals = { Academics: 0, Volunteering: 0, Engineering: 0, Clubs: 0, Internships: 0, Competitions: 0 };
             let leadershipCount = 0;
             let participantCount = 0;
 
             rawData.forEach(item => {
-                catTotals[item.category] += calculateHours(item.time);
+                catTotals[item.category] += item.hours;
                 if (item.leadership) leadershipCount++;
                 else participantCount++;
             });
@@ -273,7 +262,7 @@
                     labels: Object.keys(catTotals),
                     datasets: [{
                         data: Object.values(catTotals),
-                        backgroundColor: [themeColors.Academics, themeColors.Volunteering, themeColors.Internships, themeColors.Certificates, themeColors.Clubs],
+                        backgroundColor: [themeColors.Academics, themeColors.Volunteering, themeColors.Engineering, themeColors.Clubs, themeColors.Internships, themeColors.Competitions],
                         borderWidth: 0,
                         hoverOffset: 10
                     }]
@@ -283,7 +272,7 @@
                     maintainAspectRatio: false,
                     cutout: '65%',
                     plugins: {
-                        legend: { position: 'right', labels: { font: { family: 'Inter', size: 12 }, usePointStyle: true, padding: 20 } },
+                        legend: { position: 'right', labels: { font: { family: 'Inter', size: 12 }, usePointStyle: true, padding: 15 } },
                         tooltip: {
                             callbacks: {
                                 label: function(context) { return ` ${context.label}: ${context.raw} Hours`; }
