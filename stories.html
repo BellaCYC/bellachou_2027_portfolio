@@ -36,7 +36,7 @@
         
         <header class="text-center max-w-3xl mx-auto space-y-4">
             <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-slate-900">Stories Behind</h1>
-            <p class="text-lg text-slate-600">Explore the personal motivations, design journeys, milestones, and challenges of each strategic initiative.</p>
+            <p class="text-lg text-slate-600">Explore personal motivations, deep journeys, social media links, and academic publications of each initiative.</p>
         </header>
 
         <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -44,7 +44,7 @@
             <div class="lg:col-span-4 space-y-4">
                 <div class="glass-panel rounded-2xl p-6 shadow-sm space-y-4">
                     <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-2">Select Activity</h3>
-                    <p class="text-xs text-slate-500 leading-relaxed mb-4">Click any activity below to load its dedicated chronological progress diary, motivations, effort mapping, and photo showcases.</p>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-4">Click any activity below to load its dedicated chronological progress diary, active links, and publication showcases.</p>
                     
                     <div class="max-h-[60vh] overflow-y-auto space-y-2 pr-2 hide-scroll" id="story-list-container">
                         <!-- Filled Dynamically via JS -->
@@ -65,41 +65,86 @@
     <script>
         const rawData = [
             { 
-                category: 'Volunteering', title: 'Infinitas Online Tutoring Project', role: 'President', time: '3 Years (Grade 10 – Grade 12)', desc: 'Managed a student-led online platform that provides free, one-on-one academic tutoring to underprivileged and remote students. Handled scheduling, volunteer onboarding, and logistics for a network of over 650 student volunteers across 200 schools, delivering a total of 1,600+ instructional hours.',
-                highlights: [
-                    { type: 'image', url: 'https://placehold.co/600x400/indigo/white?text=Workshop+Session', caption: 'Volunteer training seminar for 650+ students.' },
-                    { type: 'image', url: 'https://placehold.co/600x400/indigo/white?text=Platform+Dashboard', caption: 'Our custom-built tutoring scheduling interface.' },
-                    { type: 'image', url: 'https://placehold.co/600x400/indigo/white?text=Closing+Ceremony', caption: 'Celebrating 1,600+ instructional hours.' }
-                ]
+                category: 'Volunteering', 
+                title: 'Infinitas Online Tutoring Project', 
+                role: 'President', 
+                time: '3 Years (Grade 10 – Grade 12)', 
+                desc: 'Managed a student-led online platform that provides free, one-on-one academic tutoring to underprivileged and remote students. Handled scheduling, volunteer onboarding, and logistics for a network of over 650 student volunteers across 200 schools, delivering a total of 1,600+ instructional hours.',
+                instagram: 'https://www.instagram.com/infinitas.tw/',
+                handle: '@infinitas.tw',
+                milestones: ['Onboarded 650+ student tutors', 'Delivered 1,600+ tutoring hours', 'Established a network of 200 partner schools']
             },
             { 
-                category: 'Volunteering', title: 'WEGO For Farmers Project', role: 'Core Member', time: '4 Years (Grade 9 – Grade 12)', desc: 'Partnered with 24 local Taiwanese farmers to help them market their produce online. Designed social media posts, created digital promotional graphics, and helped manage online campaigns to make local agricultural products more visible to digital consumers.',
-                highlights: [
-                    { type: 'image', url: 'https://placehold.co/600x400/emerald/white?text=Farmer+Visit', caption: 'Field research with local agricultural partners.' },
-                    { type: 'image', url: 'https://placehold.co/600x400/emerald/white?text=Social+Media+Design', caption: 'Graphic campaign for local organic produce.' }
-                ]
+                category: 'Volunteering', 
+                title: 'WEGO For Farmers Project', 
+                role: 'Core Member (Social Media & Graphic Designer)', 
+                time: '4 Years (Grade 9 – Grade 12)', 
+                desc: 'Partnered with 24 local Taiwanese farmers to help them market their produce online. Designed social media posts, created digital promotional graphics, and helped manage online campaigns to make local agricultural products more visible to digital consumers.',
+                instagram: 'https://www.instagram.com/wego_forfarmers/',
+                handle: '@wego_forfarmers',
+                milestones: ['Partnered with 24 local farms', 'Designed digital promotional campaigns', 'Increased online agricultural engagement']
             },
             { 
-                category: 'Volunteering', title: 'Cocoa & Hearth Student Charity', role: 'Co-Founder', time: '2 Years (Grade 11 – Grade 12)', desc: 'Co-founded a student-led non-profit organization at WEGO to support vulnerable groups. We organize campus cookie bake sales and donate 100% of the proceeds to partner nursing homes.',
-                highlights: [
-                    { type: 'image', url: 'https://placehold.co/600x400/rose/white?text=Bake+Sale+Day', caption: 'Campus cookie sale for charity funding.' },
-                    { type: 'image', url: 'https://placehold.co/600x400/rose/white?text=Elder+Care+Visit', caption: 'Intergenerational connection at nursing home.' }
-                ]
+                category: 'Volunteering', 
+                title: 'Cocoa & Hearth Student Charity', 
+                role: 'Co-Founder / Core Member (Member)', 
+                time: '2 Years (Grade 11 – Grade 12)', 
+                desc: 'Co-founded a student-led non-profit organization at WEGO to support vulnerable groups. We organize campus cookie bake sales and donate 100% of the proceeds to partner nursing homes to help combat elder isolation and promote intergenerational connection in Taiwan\'s aging society. Recently, we expanded our mission to local children\'s homes to provide companionship, mentorship, and emotional support to underserved children who lack stable family care.',
+                instagram: 'https://www.instagram.com/cocoa_and_hearth/',
+                handle: '@cocoa_and_hearth',
+                milestones: ['Co-founded campus charity framework', 'Conducted cookie fundraising drives', 'Expanded companion outreach to child welfare centers']
             },
-            { category: 'Academics', title: 'LLM-Based AI Development for Otolaryngology Diagnosis', role: 'Student Research Assistant / Co-Author', time: 'Completed by 2025', desc: 'Collaborated with the ENT medical team at Taipei Veterans General Hospital under Dr. Chu. Assisted with data preparation and testing of Large Language Models (LLMs) optimized to help doctors detect middle ear diseases. Earned a co-authorship on the resulting PubMed-indexed paper (PMID: 40776019) and presented a poster at MedInfo 2025.' },
-            { category: 'Academics', title: 'Palpebral Capillary Database for Ocular Disease AI Models', role: 'Student Researcher', time: 'Ongoing (Current)', desc: 'Assisting with clinical data collection at Taipei Veterans General Hospital. Using non-invasive imaging tools to take photos of palpebral capillaries (eyelid microcirculation) to build a new database that will eventually train AI models to spot early risks for glaucoma, cataracts, and macular degeneration.' },
-            { category: 'Engineering', title: 'Android HCI App Development for Wearable Smart Rings', role: 'Lead UI Designer & Programmer', time: 'High School', desc: 'Programmed an Android application frontend that syncs automatically with a wearable smart ring. Focused on Human-Computer Interaction (HCI) design choices to create a dark-mode layout that cleanly maps out real-time biometric and physiological data for users.' }
+            { 
+                category: 'Academics', 
+                title: 'LLM-Based AI Development for Otolaryngology Diagnosis', 
+                role: 'Student Research Assistant / Co-Author (Member)', 
+                time: 'Completed by 2025', 
+                desc: 'Collaborated with the ENT medical team at Taipei Veterans General Hospital under Dr. Chu. Assisted with data preparation and testing of Large Language Models (LLMs) optimized to help doctors detect middle ear diseases. Earned a co-authorship on the resulting PubMed-indexed paper (PMID: 40776019) and presented a poster at MedInfo 2025.',
+                poster: '2025 MedInfo posters.png',
+                paperTitle: 'Leveraging Large Language Models for Cancer Variant Classification',
+                roleNote: 'Special thanks acknowledged on the internationally presented MedInfo study.',
+                milestones: ['Preprocessed otolaryngology data corpora', 'Evaluated GPT-4o vs LLaMA model pipelines', 'Earned research co-authorship & acknowledgment']
+            },
+            { 
+                category: 'Academics', 
+                title: 'Palpebral Capillary Database for Ocular Disease AI Models', 
+                role: 'Student Researcher (Member)', 
+                time: 'Ongoing (Current)', 
+                desc: 'Assisting with clinical data collection at Taipei Veterans General Hospital. Using non-invasive imaging tools to take photos of palpebral capillaries (eyelid microcirculation) to build a new database that will eventually train AI models to spot early risks for glaucoma, cataracts, and macular degeneration.',
+                milestones: ['Collected non-invasive microcirculation frames', 'Constructed palpebral ocular datasets', 'Collaborated with clinical ophthalmology engineers']
+            },
+            { 
+                category: 'Academics', 
+                title: 'Systematic Meta-Analysis of Audiological Screening Tools', 
+                role: 'Independent Student Researcher', 
+                time: 'High School', 
+                desc: 'Conducted a structured meta-analysis of existing clinical audiology papers to evaluate methods for digital hearing screening. Used the data to plan the layout and logic for a mobile screening app aimed at reducing diagnostic bottlenecks for remote patients.',
+                milestones: ['Analyzed legacy audiological studies', 'Identified primary screening indicators', 'Engineered baseline interface logic structures']
+            },
+            { 
+                category: 'Engineering', 
+                title: 'Android HCI App Development for Wearable Smart Rings', 
+                role: 'Lead UI Designer & Programmer (Member)', 
+                time: 'High School', 
+                desc: 'Programmed an Android application frontend that syncs automatically with a wearable smart ring. Focused on Human-Computer Interaction (HCI) design choices to create a dark-mode layout that cleanly maps out real-time biometric and physiological data for users.',
+                milestones: ['Programmed low-latency sync pipelines', 'Designed dark-mode biomedical layouts', 'Optimized data synchronization pathways']
+            }
         ];
 
         let state = {
-            selectedStoryIndex: 0,
-            activeHighlightIndex: 0
+            selectedStoryIndex: 0
         };
 
         const themeColors = {
             Academics: '#3b82f6',
             Volunteering: '#10b981',
             Engineering: '#f59e0b'
+        };
+
+        const categoryClasses = {
+            Academics: { bg: 'bg-blue-50/50', border: 'border-blue-500', text: 'text-blue-800' },
+            Volunteering: { bg: 'bg-emerald-50/50', border: 'border-emerald-500', text: 'text-emerald-800' },
+            Engineering: { bg: 'bg-amber-50/50', border: 'border-amber-500', text: 'text-amber-800' }
         };
 
         function renderStorySelectors() {
@@ -112,7 +157,7 @@
                 btn.onclick = () => selectStory(index);
                 
                 btn.innerHTML = `
-                    <span class="text-[10px] uppercase tracking-wider font-bold" style="color: ${state.selectedStoryIndex === index ? '#f1f5f9' : themeColors[item.category] || '#64748b'}">${item.category}</span>
+                    <span class="text-[10px] uppercase tracking-wider font-bold" style="color: ${state.selectedStoryIndex === index ? '#f1f5f9' : themeColors[item.category]}">${item.category}</span>
                     <span class="text-xs md:text-sm font-bold truncate w-full">${item.title}</span>
                 `;
                 listContainer.appendChild(btn);
@@ -121,93 +166,123 @@
 
         function selectStory(index) {
             state.selectedStoryIndex = index;
-            state.activeHighlightIndex = 0;
             renderStorySelectors();
-            renderStoryContent();
-        }
-
-        function renderStoryContent() {
-            const item = rawData[state.selectedStoryIndex];
+            
+            const item = rawData[index];
             const pane = document.getElementById('story-display-pane');
             pane.style.opacity = '0';
             
-            const categoryClasses = {
-                Academics: { bg: 'bg-blue-50/50', border: 'border-blue-500' },
-                Volunteering: { bg: 'bg-emerald-50/50', border: 'border-emerald-500' },
-                Engineering: { bg: 'bg-amber-50/50', border: 'border-amber-500' }
-            };
-            const activeCat = categoryClasses[item.category] || { bg: 'bg-slate-50', border: 'border-slate-500' };
-
             setTimeout(() => {
+                let resourcesPanel = '';
+                
+                // Construct Social & Campaign Media Segment
+                if (item.instagram) {
+                    resourcesPanel = `
+                        <div class="space-y-3 pt-6 border-t border-slate-100">
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">Website</h4>
+                            <div class="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm max-w-md">
+                                <div class="flex-grow">
+                                    <div class="text-sm font-bold text-slate-800">Active Instagram Page</div>
+                                    <div class="text-xs text-slate-500">${item.handle}</div>
+                                </div>
+                                <a href="${item.instagram}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold transition-all">
+                                    Visit Channel
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Construct Academic Publication Segment
+                let academicPanel = '';
+                if (item.title.includes('LLM-Based AI') || item.title.includes('Meta-Analysis')) {
+                    academicPanel = `
+                        <div class="space-y-3 pt-6 border-t border-slate-100">
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">Academic Dissemination & References</h4>
+                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                                    <div>
+                                        <div class="text-sm font-bold text-slate-900">MedInfo 2025 Poster Presentation</div>
+                                        <div class="text-xs text-slate-500 mt-1">Presented at Taipei Medical Conference and indexed globally.</div>
+                                    </div>
+                                    <span class="px-2.5 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-md border border-blue-100">
+                                        PubMed & MedInfo Indexed
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Build Photographic Documentation Area with actual image assets
+                let photoHTML = '';
+                if (item.title.includes('LLM-Based AI')) {
+                    photoHTML = `
+                        <div class="space-y-3 pt-6 border-t border-slate-100">
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">Photographic Documentation</h4>
+                            <div class="space-y-3">
+                                <div class="bg-white p-2 rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                                    <img src="https://i.pinimg.com/736x/69/92/44/69924430b79f179e6547dcfb7e94017d.jpg" alt="MedInfo 2025 Poster - LLM for Cancer Variant Classification" class="w-full h-auto rounded-xl transition-all duration-300 hover:scale-[1.01]">
+                                </div>
+                                <p class="text-xs text-slate-500 italic text-center">Figure 1: "Leveraging Large Language Models for Cancer Variant Classification" presented at MedInfo 2025.</p>
+                            </div>
+                        </div>
+                    `;
+                } else if (item.title.includes('Meta-Analysis')) {
+                    photoHTML = `
+                        <div class="space-y-3 pt-6 border-t border-slate-100">
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">Photographic Documentation</h4>
+                            <div class="space-y-3">
+                                <div class="bg-white p-2 rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                                    <img src="https://i.pinimg.com/736x/2e/00/48/2e0048f4a6c342eecb65c0d00f1c8351.jpg" alt="MedInfo 2025 Poster - Deep Learning ECG Classification" class="w-full h-auto rounded-xl transition-all duration-300 hover:scale-[1.01]">
+                                </div>
+                                <p class="text-xs text-slate-500 italic text-center">Figure 2: "A Deep Learning Approach to ECG Classification" presented at MedInfo 2025.</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    photoHTML = `
+                        <div class="space-y-3 pt-6 border-t border-slate-100">
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">Photographic Documentation</h4>
+                            <div class="w-full min-h-[260px] bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center p-6 text-center">
+                                <div class="text-slate-400 text-lg font-semibold mb-2">Activity Photo Showcase</div>
+                                <p class="text-xs text-slate-500 max-w-md leading-relaxed">
+                                    Replace this layout card with photos documenting your workshops, coding screens, certificates, field visits, or team collaborative actions.
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                }
+
                 pane.innerHTML = `
                     <div class="space-y-6">
+                        <!-- Header Meta Block -->
                         <div>
-                            <span class="text-xs uppercase tracking-widest font-bold" style="color: ${themeColors[item.category] || '#64748b'}">${item.category}</span>
+                            <span class="text-xs uppercase tracking-widest font-bold" style="color: ${themeColors[item.category]}">${item.category}</span>
                             <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">${item.title}</h2>
                             <p class="text-sm font-semibold text-slate-500 mt-2">Role: ${item.role} (${item.time})</p>
                         </div>
                         
-                        <div class="p-5 rounded-2xl border-l-4 ${activeCat.bg} ${activeCat.border}">
-                            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Brief Summary</h4>
+                        <!-- Categorized Summary Accent Block -->
+                        <div class="p-5 rounded-2xl border-l-4 ${categoryClasses[item.category].bg} ${categoryClasses[item.category].border}">
+                            <h4 class="text-xs font-bold uppercase tracking-widest ${categoryClasses[item.category].text} mb-2">Brief Summary</h4>
                             <p class="text-sm text-slate-700 leading-relaxed text-justify">
                                 ${item.desc}
                             </p>
                         </div>
 
-                        ${item.highlights ? renderHighlights(item.highlights) : ''}
-                        
-                        <!-- Added Instagram Feed Block -->
-                        ${renderSocialFeed()}
+                        <!-- Active External Link Section -->
+                        ${resourcesPanel}
+
+                        <!-- Clinical Publication & Poster References -->
+                        ${academicPanel}
+
+                        <!-- Photographic Documentation Showcase -->
+                        ${photoHTML}
                     </div>
                 `;
                 pane.style.opacity = '1';
             }, 150);
-        }
-
-        function renderSocialFeed() {
-            return `
-                <div class="space-y-4 pt-8 border-t border-slate-100">
-                    <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">Social Media Feed (Mockup)</h4>
-                    <div class="grid grid-cols-3 gap-2 p-2 bg-slate-100 rounded-2xl">
-                        <!-- Simulated Instagram Grid -->
-                        ${[1,2,3,4,5,6].map(i => `
-                            <div class="aspect-square bg-slate-300 rounded-lg overflow-hidden group relative cursor-pointer">
-                                <img src="https://placehold.co/200x200/slate/white?text=Post+${i}" class="w-full h-full object-cover transition-transform group-hover:scale-110">
-                            </div>
-                        `).join('')}
-                    </div>
-                    <button class="w-full py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors">
-                        View Full Instagram Gallery
-                    </button>
-                </div>
-            `;
-        }
-
-        function renderHighlights(highlights) {
-            const current = highlights[state.activeHighlightIndex];
-            return `
-                <div class="space-y-3 pt-4 border-t border-slate-100">
-                    <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">Chronological Highlights</h4>
-                    
-                    <div class="relative group rounded-3xl p-1 border-2 border-transparent hover:border-indigo-400/30 transition-all duration-500 shadow-xl" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
-                        <div class="overflow-hidden rounded-2xl">
-                            <img src="${current.url}" alt="Highlight" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105">
-                            <div class="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm p-3 rounded-xl border border-white/50 text-xs font-medium text-slate-800">
-                                ${current.caption}
-                            </div>
-                        </div>
-
-                        <button onclick="changeHighlight(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white rounded-full shadow-lg backdrop-blur-sm transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
-                        <button onclick="changeHighlight(1)" class="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white rounded-full shadow-lg backdrop-blur-sm transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
-                    </div>
-                </div>
-            `;
-        }
-
-        function changeHighlight(dir) {
-            const item = rawData[state.selectedStoryIndex];
-            state.activeHighlightIndex = (state.activeHighlightIndex + dir + item.highlights.length) % item.highlights.length;
-            renderStoryContent();
         }
 
         function initApp() {
