@@ -7,10 +7,45 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #faf9f6; color: #2d3748; }
-        .glass-panel { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); }
-        .hide-scroll::-webkit-scrollbar { display: none; }
-        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #faf9f6; 
+            color: #2d3748; 
+        }
+        .glass-panel { 
+            background: rgba(255, 255, 255, 0.9); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(226, 232, 240, 0.8); 
+        }
+        .hide-scroll::-webkit-scrollbar { 
+            display: none; 
+        }
+        .hide-scroll { 
+            -ms-overflow-style: none; 
+            scrollbar-width: none; 
+        }
+        
+        /* Vivid animated hover effects for interactive elements */
+        .interactive-btn {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .interactive-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .interactive-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Image Slide Card Transition */
+        .slide-card {
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .slide-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+        }
     </style>
 </head>
 <body class="antialiased text-gray-800">
@@ -41,6 +76,7 @@
 
         <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
+            <!-- Left Side Selection Panel -->
             <div class="lg:col-span-4 space-y-4">
                 <div class="glass-panel rounded-2xl p-6 shadow-sm space-y-4">
                     <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-2">Select Activity</h3>
@@ -52,6 +88,7 @@
                 </div>
             </div>
 
+            <!-- Right Side Detailed Information Panel -->
             <div class="lg:col-span-8">
                 <div class="glass-panel rounded-2xl p-8 shadow-sm space-y-8 min-h-[600px] transition-all duration-300" id="story-display-pane">
                     <!-- Loaded dynamically via JS -->
@@ -63,6 +100,7 @@
     </main>
 
     <script>
+        // High-Fidelity Dataset containing precise student summaries and verified Pinterest image links
         const rawData = [
             { 
                 category: 'Volunteering', 
@@ -70,9 +108,10 @@
                 role: 'President', 
                 time: '3 Years (Grade 10 – Grade 12)', 
                 desc: 'Managed a student-led online platform that provides free, one-on-one academic tutoring to underprivileged and remote students. Handled scheduling, volunteer onboarding, and logistics for a network of over 650 student volunteers across 200 schools, delivering a total of 1,600+ instructional hours.',
-                instagram: 'https://www.instagram.com/infinitas.tw/',
+                instagram: 'https://www.instagram.com/infinitas.tw?igsh=d3BtaHV2Y3I1aWls',
                 handle: '@infinitas.tw',
-                milestones: ['Onboarded 650+ student tutors', 'Delivered 1,600+ tutoring hours', 'Established a network of 200 partner schools']
+                milestones: ['Onboarded 650+ student tutors', 'Delivered 1,600+ tutoring hours', 'Established a network of 200 partner schools'],
+                images: [] // Left blank per requested omission
             },
             { 
                 category: 'Volunteering', 
@@ -80,59 +119,80 @@
                 role: 'Core Member (Social Media & Graphic Designer)', 
                 time: '4 Years (Grade 9 – Grade 12)', 
                 desc: 'Partnered with 24 local Taiwanese farmers to help them market their produce online. Designed social media posts, created digital promotional graphics, and helped manage online campaigns to make local agricultural products more visible to digital consumers.',
-                instagram: 'https://www.instagram.com/wego_forfarmers/',
+                instagram: 'https://www.instagram.com/wego_forfarmers?igsh=OHgzbXhobm8zNmVl',
                 handle: '@wego_forfarmers',
-                milestones: ['Partnered with 24 local farms', 'Designed digital promotional campaigns', 'Increased online agricultural engagement']
+                milestones: ['Partnered with 24 local farms', 'Designed digital promotional campaigns', 'Increased online agricultural engagement'],
+                images: [
+                    { url: 'https://i.pinimg.com/736x/04/98/5d/04985d4af9ad0196d9386e075426cb3d.jpg' },
+                    { url: 'https://i.pinimg.com/736x/3d/61/76/3d6176ad3e497b8d1a5a314f07a2d8d5.jpg' },
+                    { url: 'https://i.pinimg.com/736x/08/d0/02/08d002858a7b25c82870ec02f83af251.jpg' },
+                    { url: 'https://i.pinimg.com/736x/eb/6d/1d/eb6d1df57874a0eae0d05bfed5166bd9.jpg' },
+                    { url: 'https://i.pinimg.com/736x/23/19/37/231937cc572d5017bd699c15748deca4.jpg' },
+                    { url: 'https://i.pinimg.com/736x/f7/33/7a/f7337a11a3c54941ac4d201be9bfcb3e.jpg' },
+                    { url: 'https://i.pinimg.com/474x/a4/f6/cc/a4f6ccb29eaaa78676c25c46d35b2f14.jpg' }
+                ]
             },
             { 
                 category: 'Volunteering', 
                 title: 'Cocoa & Hearth Student Charity', 
-                role: 'Co-Founder / Core Member (Member)', 
+                role: 'Co-Founder / Core Member', 
                 time: '2 Years (Grade 11 – Grade 12)', 
-                desc: 'Co-founded a student-led non-profit organization at WEGO to support vulnerable groups. We organize campus cookie bake sales and donate 100% of the proceeds to partner nursing homes to help combat elder isolation and promote intergenerational connection in Taiwan\'s aging society. Recently, we expanded our mission to local children\'s homes to provide companionship, mentorship, and emotional support to underserved children who lack stable family care.',
-                instagram: 'https://www.instagram.com/cocoa_and_hearth/',
+                desc: 'Co-founded a student-led non-profit organization at WEGO to support vulnerable groups. We organize campus cookie bake sales and donate 100% of the proceeds to partner nursing homes to help combat elder isolation and promote intergenerational connection in Taiwan\'s aging society. Recently, we expanded our mission to local children\'s homes to provide companionship, mentorship, and emotional support to underserved children.',
+                instagram: 'https://www.instagram.com/cocoa_and_hearth?igsh=MWwzZDM1b2dzczVjOA==',
                 handle: '@cocoa_and_hearth',
-                milestones: ['Co-founded campus charity framework', 'Conducted cookie fundraising drives', 'Expanded companion outreach to child welfare centers']
+                milestones: ['Co-founded campus charity framework', 'Conducted cookie fundraising drives', 'Expanded companion outreach to child welfare centers'],
+                images: [] // Left blank per requested omission
             },
             { 
                 category: 'Academics', 
                 title: 'LLM-Based AI Development for Otolaryngology Diagnosis', 
-                role: 'Student Research Assistant / Co-Author (Member)', 
+                role: 'Student Research Assistant / Co-Author', 
                 time: 'Completed by 2025', 
                 desc: 'Collaborated with the ENT medical team at Taipei Veterans General Hospital under Dr. Chu. Assisted with data preparation and testing of Large Language Models (LLMs) optimized to help doctors detect middle ear diseases. Earned a co-authorship on the resulting PubMed-indexed paper (PMID: 40776019) and presented a poster at MedInfo 2025.',
-                poster: '2025 MedInfo posters.png',
                 paperTitle: 'Leveraging Large Language Models for Cancer Variant Classification',
-                roleNote: 'Special thanks acknowledged on the internationally presented MedInfo study.',
-                milestones: ['Preprocessed otolaryngology data corpora', 'Evaluated GPT-4o vs LLaMA model pipelines', 'Earned research co-authorship & acknowledgment']
+                roleNote: 'Special student contribution acknowledged on the internationally presented MedInfo study.',
+                milestones: ['Preprocessed otolaryngology data corpora', 'Evaluated GPT-4o vs LLaMA model pipelines', 'Earned research co-authorship & acknowledgment'],
+                images: [
+                    { url: 'https://i.pinimg.com/736x/57/90/e4/5790e49f0d294d1f2ac306c4ddd4ca3b.jpg' },
+                    { url: 'https://i.pinimg.com/736x/3e/c9/22/3ec922a678683f5bd55043d505a6be58.jpg' }
+                ]
             },
             { 
                 category: 'Academics', 
                 title: 'Palpebral Capillary Database for Ocular Disease AI Models', 
-                role: 'Student Researcher (Member)', 
+                role: 'Student Researcher', 
                 time: 'Ongoing (Current)', 
                 desc: 'Assisting with clinical data collection at Taipei Veterans General Hospital. Using non-invasive imaging tools to take photos of palpebral capillaries (eyelid microcirculation) to build a new database that will eventually train AI models to spot early risks for glaucoma, cataracts, and macular degeneration.',
-                milestones: ['Collected non-invasive microcirculation frames', 'Constructed palpebral ocular datasets', 'Collaborated with clinical ophthalmology engineers']
+                milestones: ['Collected non-invasive microcirculation frames', 'Constructed palpebral ocular datasets', 'Collaborated with clinical ophthalmology engineers'],
+                images: [
+                    { url: 'https://i.pinimg.com/736x/17/b2/2d/17b22d5f40882255a79dce56cc1553ab.jpg' },
+                    { url: 'https://i.pinimg.com/736x/32/24/0c/32240cce640e4677721288d09cbcae0f.jpg' },
+                    { url: 'https://i.pinimg.com/736x/6c/71/e5/6c71e569b492f91af0f503989615c807.jpg' }
+                ]
             },
             { 
                 category: 'Academics', 
                 title: 'Systematic Meta-Analysis of Audiological Screening Tools', 
                 role: 'Independent Student Researcher', 
                 time: 'High School', 
-                desc: 'Conducted a structured meta-analysis of existing clinical audiology papers to evaluate methods for digital hearing screening. Used the data to plan the layout and logic for a mobile screening app aimed at reducing diagnostic bottlenecks for remote patients.',
-                milestones: ['Analyzed legacy audiological studies', 'Identified primary screening indicators', 'Engineered baseline interface logic structures']
+                desc: 'Conducted a structured meta-analysis of existing clinical audiology papers to evaluate methods for digital hearing screening. Used the data to plan the layout and logic for a mobile screening app aimed dead at reducing diagnostic bottlenecks for remote patients.',
+                milestones: ['Analyzed legacy audiological studies', 'Identified primary screening indicators', 'Engineered baseline interface logic structures'],
+                images: []
             },
             { 
                 category: 'Engineering', 
                 title: 'Android HCI App Development for Wearable Smart Rings', 
-                role: 'Lead UI Designer & Programmer (Member)', 
+                role: 'Lead UI Designer & Programmer', 
                 time: 'High School', 
                 desc: 'Programmed an Android application frontend that syncs automatically with a wearable smart ring. Focused on Human-Computer Interaction (HCI) design choices to create a dark-mode layout that cleanly maps out real-time biometric and physiological data for users.',
-                milestones: ['Programmed low-latency sync pipelines', 'Designed dark-mode biomedical layouts', 'Optimized data synchronization pathways']
+                milestones: ['Programmed low-latency sync pipelines', 'Designed dark-mode biomedical layouts', 'Optimized data synchronization pathways'],
+                images: []
             }
         ];
 
         let state = {
-            selectedStoryIndex: 0
+            selectedStoryIndex: 0,
+            currentImageIndex: 0
         };
 
         const themeColors = {
@@ -153,7 +213,7 @@
             
             rawData.forEach((item, index) => {
                 const btn = document.createElement('button');
-                btn.className = `w-full text-left p-3 rounded-xl transition-all border border-transparent flex flex-col gap-1 ${state.selectedStoryIndex === index ? 'bg-slate-800 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-50 border-slate-200'}`;
+                btn.className = `w-full text-left p-4 rounded-xl transition-all border border-transparent flex flex-col gap-1 interactive-btn ${state.selectedStoryIndex === index ? 'bg-slate-800 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-50 border-slate-200'}`;
                 btn.onclick = () => selectStory(index);
                 
                 btn.innerHTML = `
@@ -164,8 +224,63 @@
             });
         }
 
+        // Global functions exposed to navigate slide indices
+        window.prevImage = function() {
+            const item = rawData[state.selectedStoryIndex];
+            if (!item.images || item.images.length <= 1) return;
+            state.currentImageIndex = (state.currentImageIndex - 1 + item.images.length) % item.images.length;
+            updateCarouselDOM(item);
+        }
+
+        window.nextImage = function() {
+            const item = rawData[state.selectedStoryIndex];
+            if (!item.images || item.images.length <= 1) return;
+            state.currentImageIndex = (state.currentImageIndex + 1) % item.images.length;
+            updateCarouselDOM(item);
+        }
+
+        window.setCarouselImage = function(idx) {
+            const item = rawData[state.selectedStoryIndex];
+            if (!item.images) return;
+            state.currentImageIndex = idx;
+            updateCarouselDOM(item);
+        }
+
+        function updateCarouselDOM(item) {
+            const carouselImg = document.getElementById('carousel-img');
+            const carouselBg = document.getElementById('carousel-bg');
+            if (!carouselImg) return;
+            
+            // Subtle transition fade out/in on source update
+            carouselImg.style.opacity = '0';
+            if (carouselBg) carouselBg.style.opacity = '0';
+            
+            setTimeout(() => {
+                const imageUrl = item.images[state.currentImageIndex].url;
+                carouselImg.src = imageUrl;
+                carouselImg.style.opacity = '1';
+                if (carouselBg) {
+                    carouselBg.src = imageUrl;
+                    carouselBg.style.opacity = '0.4';
+                }
+            }, 100);
+
+            // Update dot highlighted visual states
+            item.images.forEach((_, i) => {
+                const dot = document.getElementById(`carousel-dot-${i}`);
+                if (dot) {
+                    if (i === state.currentImageIndex) {
+                        dot.className = 'w-2.5 h-2.5 rounded-full transition-all duration-300 bg-white scale-125';
+                    } else {
+                        dot.className = 'w-2.5 h-2.5 rounded-full transition-all duration-300 bg-white/50 hover:bg-white/80';
+                    }
+                }
+            });
+        }
+
         function selectStory(index) {
             state.selectedStoryIndex = index;
+            state.currentImageIndex = 0; // Reset slide index on action card change
             renderStorySelectors();
             
             const item = rawData[index];
@@ -173,29 +288,81 @@
             pane.style.opacity = '0';
             
             setTimeout(() => {
-                let resourcesPanel = '';
+                let showBlockHTML = '';
                 
-                // Construct Social & Campaign Media Segment
-                if (item.instagram) {
-                    resourcesPanel = `
-                        <div class="space-y-3 pt-6 border-t border-slate-100">
-                            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">Website</h4>
-                            <div class="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm max-w-md">
-                                <div class="flex-grow">
-                                    <div class="text-sm font-bold text-slate-800">Active Instagram Page</div>
-                                    <div class="text-xs text-slate-500">${item.handle}</div>
+                // Render the premium interactive slider ONLY if images exist
+                if (item.images && item.images.length > 0) {
+                    showBlockHTML = `
+                        <div class="space-y-4 pt-6 border-t border-slate-100">
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">Photographic Documentation</h4>
+                            
+                            <!-- Carousel Visual Frame Container -->
+                            <div class="relative max-w-xl mx-auto group">
+                                <div class="aspect-[4/3] bg-slate-950 rounded-2xl overflow-hidden border border-slate-200 shadow-sm relative slide-card flex items-center justify-center">
+                                    
+                                    <!-- Blurred background canvas to fill bleed areas without cutting image -->
+                                    <img id="carousel-bg" src="${item.images[0].url}" class="absolute inset-0 w-full h-full object-cover filter blur-xl scale-110 opacity-40 select-none pointer-events-none transition-opacity duration-300">
+                                    
+                                    <!-- Full, contain-fitted foreground image to ensure zero cutting -->
+                                    <img id="carousel-img" src="${item.images[0].url}" alt="Story Image" class="w-full h-full object-contain relative z-10 transition-opacity duration-300">
+                                    
+                                    <!-- Elegant Overlaid Navigation Arrows -->
+                                    ${item.images.length > 1 ? `
+                                        <button onclick="prevImage()" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/85 backdrop-blur-md hover:bg-white text-slate-800 flex items-center justify-center shadow-md transition-all interactive-btn hover:scale-105 z-20" aria-label="Previous image">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                                            </svg>
+                                        </button>
+                                        <button onclick="nextImage()" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/85 backdrop-blur-md hover:bg-white text-slate-800 flex items-center justify-center shadow-md transition-all interactive-btn hover:scale-105 z-20" aria-label="Next image">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                            </svg>
+                                        </button>
+                                    ` : ''}
+
+                                    <!-- Dots Carousel Navigator at bottom -->
+                                    ${item.images.length > 1 ? `
+                                        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+                                            ${item.images.map((_, i) => `
+                                                <button id="carousel-dot-${i}" onclick="setCarouselImage(${i})" class="w-2.5 h-2.5 rounded-full transition-all duration-300 ${i === 0 ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/80'}" aria-label="Go to slide ${i+1}"></button>
+                                            `).join('')}
+                                        </div>
+                                    ` : ''}
                                 </div>
-                                <a href="${item.instagram}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold transition-all">
-                                    Visit Channel
-                                </a>
                             </div>
                         </div>
                     `;
                 }
 
-                // Construct Academic Publication Segment
+                // If it has Instagram credentials, build the high-impact social bookmark card
+                let instagramButtonHTML = '';
+                if (item.instagram) {
+                    instagramButtonHTML = `
+                        <!-- Notion-Style Direct Instagram Launch Bookmark Link Block -->
+                        <div class="flex items-center justify-between bg-white px-5 py-4 rounded-2xl border border-slate-200 hover:border-slate-300 transition-all cursor-pointer shadow-sm max-w-2xl mx-auto interactive-btn mt-4" onclick="window.open('${item.instagram}', '_blank')">
+                            <div class="flex items-center gap-3.5">
+                                <div class="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center text-pink-500">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-bold text-slate-800">Open Public Instagram Feed</div>
+                                    <p class="text-xs text-slate-500 mt-0.5">Explore active community posts on instagram.com/${item.handle}</p>
+                                </div>
+                            </div>
+                            <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-slate-600 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Construct Academic Publication references
                 let academicPanel = '';
-                if (item.title.includes('LLM-Based AI') || item.title.includes('Meta-Analysis')) {
+                if (item.category === 'Academics') {
                     academicPanel = `
                         <div class="space-y-3 pt-6 border-t border-slate-100">
                             <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">Academic Dissemination & References</h4>
@@ -214,45 +381,20 @@
                     `;
                 }
 
-                // Build Photographic Documentation Area with actual image assets
-                let photoHTML = '';
-                if (item.title.includes('LLM-Based AI')) {
-                    photoHTML = `
-                        <div class="space-y-3 pt-6 border-t border-slate-100">
-                            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">Photographic Documentation</h4>
-                            <div class="space-y-3">
-                                <div class="bg-white p-2 rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                                    <img src="https://i.pinimg.com/736x/69/92/44/69924430b79f179e6547dcfb7e94017d.jpg" alt="MedInfo 2025 Poster - LLM for Cancer Variant Classification" class="w-full h-auto rounded-xl transition-all duration-300 hover:scale-[1.01]">
+                // Flat structured list of milestones
+                const milestonesHTML = `
+                    <div class="space-y-3 pt-6 border-t border-slate-100">
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">Project Timeline Milestones</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            ${item.milestones.map(m => `
+                                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-start gap-2">
+                                    <span class="text-emerald-500 font-bold">✓</span>
+                                    <span class="text-xs font-medium text-slate-700">${m}</span>
                                 </div>
-                                <p class="text-xs text-slate-500 italic text-center">Figure 1: "Leveraging Large Language Models for Cancer Variant Classification" presented at MedInfo 2025.</p>
-                            </div>
+                            `).join('')}
                         </div>
-                    `;
-                } else if (item.title.includes('Meta-Analysis')) {
-                    photoHTML = `
-                        <div class="space-y-3 pt-6 border-t border-slate-100">
-                            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">Photographic Documentation</h4>
-                            <div class="space-y-3">
-                                <div class="bg-white p-2 rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                                    <img src="https://i.pinimg.com/736x/2e/00/48/2e0048f4a6c342eecb65c0d00f1c8351.jpg" alt="MedInfo 2025 Poster - Deep Learning ECG Classification" class="w-full h-auto rounded-xl transition-all duration-300 hover:scale-[1.01]">
-                                </div>
-                                <p class="text-xs text-slate-500 italic text-center">Figure 2: "A Deep Learning Approach to ECG Classification" presented at MedInfo 2025.</p>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    photoHTML = `
-                        <div class="space-y-3 pt-6 border-t border-slate-100">
-                            <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400">Photographic Documentation</h4>
-                            <div class="w-full min-h-[260px] bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center p-6 text-center">
-                                <div class="text-slate-400 text-lg font-semibold mb-2">Activity Photo Showcase</div>
-                                <p class="text-xs text-slate-500 max-w-md leading-relaxed">
-                                    Replace this layout card with photos documenting your workshops, coding screens, certificates, field visits, or team collaborative actions.
-                                </p>
-                            </div>
-                        </div>
-                    `;
-                }
+                    </div>
+                `;
 
                 pane.innerHTML = `
                     <div class="space-y-6">
@@ -265,20 +407,23 @@
                         
                         <!-- Categorized Summary Accent Block -->
                         <div class="p-5 rounded-2xl border-l-4 ${categoryClasses[item.category].bg} ${categoryClasses[item.category].border}">
-                            <h4 class="text-xs font-bold uppercase tracking-widest ${categoryClasses[item.category].text} mb-2">Brief Summary</h4>
+                            <h4 class="text-xs font-bold uppercase tracking-widest ${categoryClasses[item.category].text} mb-2">Project Mission & Contributions</h4>
                             <p class="text-sm text-slate-700 leading-relaxed text-justify">
                                 ${item.desc}
                             </p>
                         </div>
 
-                        <!-- Active External Link Section -->
-                        ${resourcesPanel}
+                        <!-- Active Instagram Action Launch Banner -->
+                        ${instagramButtonHTML}
+
+                        <!-- Active Photographic Documentation Carousel Layout (Completely blank if empty/omitted) -->
+                        ${showBlockHTML}
 
                         <!-- Clinical Publication & Poster References -->
                         ${academicPanel}
 
                         <!-- Photographic Documentation Showcase -->
-                        ${photoHTML}
+                        ${milestonesHTML}
                     </div>
                 `;
                 pane.style.opacity = '1';
