@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -589,4 +590,597 @@
         animate();
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bella Chou | 2027 Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #4d4d6a; font-family: 'Inter', sans-serif; color: #d6d0e9; user-select: none; }
+        canvas { display: block; outline: none; cursor: grab; }
+        canvas:active { cursor: grabbing; }
+        
+        /* Game HUD Overlays */
+        #ui-layer { position: absolute; inset: 0; pointer-events: none; z-index: 10; padding: 2.5rem; display: flex; flex-direction: column; justify-content: space-between; }
+        
+        .hud-text { font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.7rem; font-weight: 300; color: #8ab4f8; }
+        
+        /* Floating Object Label (Dynamic) */
+        #target-reticle {
+            position: absolute; pointer-events: none; opacity: 0;
+            transform: translate(-50%, -50%) scale(0.8);
+            transition: opacity 0.2s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 20; display: flex; flex-direction: column; items-center; justify-center;
+        }
+        #target-reticle.active { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        .reticle-box {
+            border: 1px solid rgba(138, 180, 248, 0.5); background: rgba(10, 15, 30, 0.75);
+            backdrop-filter: blur(4px); padding: 8px 16px; border-radius: 4px;
+            box-shadow: 0 0 15px rgba(138, 180, 248, 0.2); text-align: center;
+        }
+        .reticle-line { width: 1px; height: 30px; background: linear-gradient(to bottom, rgba(138,180,248,0.8), transparent); margin: 0 auto; }
+
+        /* Loader */
+        #loader { transition: opacity 0.8s; background-color: #020205; }
+        .progress-bar { width: 200px; height: 2px; background: #222; margin-top: 1rem; position: relative; overflow: hidden; }
+        .progress-fill { position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: #8ab4f8; transition: width 0.1s; }
+        
+        /* Vignette overlay for cinematic feel */
+        #vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at center, transparent 40%, rgba(2,2,5,0.8) 100%); z-index: 5; }
+    </style>
+    
+    <!-- Import Maps for Modern Three.js -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loader" class="fixed inset-0 z-50 flex flex-col items-center justify-center text-white">
+        <div class="hud-text text-sm animate-pulse">INITIATING SPACECRAFT CONTENTS...</div>
+        <div class="progress-bar"><div class="progress-fill" id="load-progress"></div></div>
+    </div>
+
+    <!-- Cinematic Vignette -->
+    <div id="vignette"></div>
+
+    <!-- White Transition Overlay -->
+    <div id="transition-overlay" class="fixed inset-0 z-50 bg-white opacity-0 transition-opacity duration-1000 pointer-events-none"></div>
+
+    <!-- Dynamic In-Game Reticle -->
+    <div id="target-reticle">
+        <div class="reticle-box">
+            <div class="text-white font-medium tracking-widest text-sm drop-shadow-md" id="reticle-title">MODULE</div>
+            <div class="hud-text text-[10px] mt-1 text-blue-400">CLICK TO ENGAGE</div>
+        </div>
+        <div class="reticle-line"></div>
+    </div>
+
+    <!-- Static HUD UI -->
+    <div id="ui-layer">
+        <header class="flex justify-between items-start">
+            <div>
+                <h1 class="text-2xl font-light tracking-tighter text-white drop-shadow-lg">Yuan-Chen Chou<span class="text-blue-500"></span></h1>
+                <p class="hud-text mt-2 text-slate-400">Class of 2027 | College Portfolio</p>
+            </div>
+            <div class="text-right hidden md:block">
+                <p class="hud-text text-slate-500">ORBIT: <span id="coord-readout" class="text-white">Circle</span></p>
+                <div class="flex items-center gap-2 mt-2 justify-end">
+                    <div class="w-2 h-2 rounded-full bg-blue-500 animate-ping"></div>
+                    <p class="hud-text text-[10px]">DRAG TO INSPECT</p>
+                </div>
+            </div>
+        </header>
+    </div>
+
+    <!-- 3D Scene Container -->
+    <div id="canvas-container"></div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // --- CORE SETUP ---
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x020205, 0.015);
+
+        // Cinematic slightly-isometric Perspective Camera
+        const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(-18, 12, 25);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        
+        // Game-like Lighting & Shadows
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.1;
+        container.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.maxDistance = 40;
+        controls.minDistance = 10;
+        controls.maxPolarAngle = Math.PI / 2 - 0.05; // Lock camera above ground
+
+        // --- MATERIALS & LIGHTING ---
+        // Soft ambient fill for clay/diorama look
+        const hemiLight = new THREE.HemisphereLight(0x8ab4f8, 0x050510, 0.6);
+        scene.add(hemiLight);
+
+        // Main sun/moon light casting crisp, soft shadows
+        const dirLight = new THREE.DirectionalLight(0xe2e8f0, 1.2);
+        dirLight.position.set(15, 25, 10);
+        dirLight.castShadow = true;
+        dirLight.shadow.mapSize.width = 2048;
+        dirLight.shadow.mapSize.height = 2048;
+        dirLight.shadow.camera.near = 0.5;
+        dirLight.shadow.camera.far = 50;
+        dirLight.shadow.camera.left = -15;
+        dirLight.shadow.camera.right = 15;
+        dirLight.shadow.camera.top = 15;
+        dirLight.shadow.camera.bottom = -15;
+        dirLight.shadow.bias = -0.0005;
+        scene.add(dirLight);
+
+        // Reusable smooth matte material (Clay-like)
+        const matteMat = (color) => new THREE.MeshStandardMaterial({ 
+            color: color, roughness: 0.9, metalness: 0.0 
+        });
+        const metalMat = (color) => new THREE.MeshStandardMaterial({ 
+            color: color, roughness: 0.4, metalness: 0.6 
+        });
+
+        // --- ENVIRONMENT: DEEP SPACE ---
+        scene.background = new THREE.Color(0x050510);
+        scene.fog = new THREE.FogExp2(0x070715, 0.015); // Deep space nebula tone
+
+        const spaceGroup = new THREE.Group();
+        scene.add(spaceGroup);
+
+        // Distant Planet 1 (Dark)
+        const planet1 = new THREE.Mesh(new THREE.SphereGeometry(40, 64, 64), matteMat(0x1a202c));
+        planet1.position.set(-90, -30, -120);
+        spaceGroup.add(planet1);
+
+        // Distant Planet 2 (Ringed Gas Giant)
+        const planet2Group = new THREE.Group();
+        planet2Group.position.set(70, 40, -150);
+        planet2Group.rotation.x = Math.PI / 6;
+        planet2Group.rotation.y = -Math.PI / 8;
+        const p2Body = new THREE.Mesh(new THREE.SphereGeometry(18, 32, 32), matteMat(0x1e3a8a));
+        const p2Ring = new THREE.Mesh(new THREE.TorusGeometry(26, 1.5, 16, 64), new THREE.MeshStandardMaterial({color: 0x38bdf8, transparent: true, opacity: 0.6}));
+        p2Ring.rotation.x = Math.PI / 2;
+        planet2Group.add(p2Body, p2Ring);
+        spaceGroup.add(planet2Group);
+
+        // Orbiting Satellite
+        const satelliteGroup = new THREE.Group();
+        const satCore = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 2, 16), metalMat(0xe2e8f0));
+        const panelMat = new THREE.MeshStandardMaterial({ color: 0x1e3a8a, metalness: 0.8, roughness: 0.2 });
+        const pLeft = new THREE.Mesh(new THREE.BoxGeometry(3, 0.05, 1), panelMat); pLeft.position.x = -2;
+        const pRight = new THREE.Mesh(new THREE.BoxGeometry(3, 0.05, 1), panelMat); pRight.position.x = 2;
+        const satLight = new THREE.Mesh(new THREE.SphereGeometry(0.15), new THREE.MeshBasicMaterial({color: 0xef4444}));
+        satLight.position.y = 1.1;
+        satelliteGroup.add(satCore, pLeft, pRight, satLight);
+        scene.add(satelliteGroup);
+
+        // Starfield & Nebula Dust
+        const starsGeo = new THREE.BufferGeometry();
+        const starsPos = new Float32Array(3000 * 3);
+        for(let i=0; i<9000; i++) starsPos[i] = (Math.random() - 0.5) * 350;
+        starsGeo.setAttribute('position', new THREE.BufferAttribute(starsPos, 3));
+        const starsMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.15, transparent: true, opacity: 0.6 });
+        spaceGroup.add(new THREE.Points(starsGeo, starsMat));
+
+        // --- THE DIORAMA: UFO SPACECRAFT PLATFORM ---
+        const ufoGroup = new THREE.Group();
+        scene.add(ufoGroup);
+
+        // UFO Hull Base (Detailed curving)
+        const hullColor = 0x1e293b;
+        const ufoBase = new THREE.Mesh(new THREE.CylinderGeometry(8, 3, 3.5, 64), matteMat(hullColor));
+        ufoBase.position.y = -1.75;
+        ufoBase.castShadow = true; ufoBase.receiveShadow = true;
+        ufoGroup.add(ufoBase);
+        
+        // Hull Ribs (Adding structural detail)
+        for(let i=0; i<8; i++) {
+            const rib = new THREE.Mesh(new THREE.BoxGeometry(0.4, 3.6, 1.5), metalMat(0x0f172a));
+            rib.position.y = -1.75;
+            rib.position.z = 6;
+            rib.rotation.x = Math.PI/8;
+            
+            const pivot = new THREE.Group();
+            pivot.rotation.y = (i * Math.PI) / 4;
+            pivot.add(rib);
+            ufoGroup.add(pivot);
+        }
+
+        const ufoDeck = new THREE.Mesh(new THREE.CylinderGeometry(8.2, 8, 0.5, 64), matteMat(0x334155));
+        ufoDeck.position.y = 0.25;
+        ufoDeck.castShadow = true; ufoDeck.receiveShadow = true;
+        ufoGroup.add(ufoDeck);
+
+        const neonRing = new THREE.Mesh(new THREE.TorusGeometry(8.2, 0.1, 16, 64), new THREE.MeshBasicMaterial({ color: 0x3b82f6 }));
+        neonRing.position.y = 0;
+        ufoGroup.add(neonRing);
+
+        // UFO Engine Core (Glowing underbelly)
+        const engineGlow = new THREE.PointLight(0x60a5fa, 5, 20);
+        engineGlow.position.set(0, -3, 0);
+        ufoGroup.add(engineGlow);
+        const engineCore = new THREE.Mesh(new THREE.SphereGeometry(2.5, 32, 32), new THREE.MeshBasicMaterial({ color: 0x93c5fd }));
+        engineCore.position.y = -3;
+        engineCore.scale.y = 0.5;
+        ufoGroup.add(engineCore);
+
+        // Shared arrays for animation
+        const animatedRings = [];
+        let holoBaseRef = null;
+
+        // --- INTERACTIVE MODULES ---
+        const interactables = [];
+        const hitboxMat = new THREE.MeshBasicMaterial({ visible: false });
+
+        // A. CONTROL CENTER (Dashboard) - Extruded curved desk
+        const deskGroup = new THREE.Group();
+        deskGroup.position.set(0, 0.5, 3);
+        
+        // Pill-shaped Curved Desk Base using ExtrudeGeometry
+        const deskShape = new THREE.Shape();
+        deskShape.moveTo(-1.6, -0.7);
+        deskShape.lineTo(1.6, -0.7);
+        deskShape.absarc(1.6, 0, 0.7, -Math.PI/2, Math.PI/2, false);
+        deskShape.lineTo(-1.6, 0.7);
+        deskShape.absarc(-1.6, 0, 0.7, Math.PI/2, Math.PI*1.5, false);
+        
+        const extrudeSettings = { depth: 0.15, bevelEnabled: true, bevelSegments: 3, steps: 1, bevelSize: 0.05, bevelThickness: 0.05 };
+        const deskBase = new THREE.Mesh(new THREE.ExtrudeGeometry(deskShape, extrudeSettings), matteMat(0xe2e8f0));
+        deskBase.rotation.x = Math.PI / 2;
+        deskBase.position.y = 1.1;
+        deskBase.castShadow = true; deskBase.receiveShadow = true;
+        
+        // Angled cyber-legs
+        const leg1 = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.05, 1.2, 16), metalMat(0x64748b)); 
+        leg1.position.set(-1.4, 0.5, 0); leg1.rotation.z = Math.PI/8; leg1.castShadow=true;
+        const leg2 = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.05, 1.2, 16), metalMat(0x64748b)); 
+        leg2.position.set(1.4, 0.5, 0); leg2.rotation.z = -Math.PI/8; leg2.castShadow=true;
+        deskGroup.add(deskBase, leg1, leg2);
+
+        // Curved Ultra-wide Monitor
+        const screenGeo = new THREE.CylinderGeometry(1.8, 1.8, 0.9, 32, 1, true, -Math.PI/5, Math.PI/2.5);
+        const screenMat = new THREE.MeshBasicMaterial({ color: 0x3b82f6, side: THREE.DoubleSide, transparent: true, opacity: 0.9 });
+        const screen = new THREE.Mesh(screenGeo, screenMat);
+        screen.position.set(0, 1.7, -0.2);
+        
+        // Monitor Frame (Slightly larger cylinder)
+        const frameGeo = new THREE.CylinderGeometry(1.85, 1.85, 0.95, 32, 1, true, -Math.PI/4.8, Math.PI/2.4);
+        const frame = new THREE.Mesh(frameGeo, matteMat(0x0f172a));
+        frame.position.set(0, 1.7, -0.2);
+        frame.castShadow = true;
+        deskGroup.add(screen, frame);
+
+        // Holographic projector on desk
+        const holoBase = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.25, 0.1, 32), metalMat(0x475569));
+        holoBase.position.set(1.2, 1.2, 0.3);
+        deskGroup.add(holoBase);
+        holoBaseRef = holoBase; // Store for animation
+        
+        const holoLight = new THREE.PointLight(0x3b82f6, 1, 3);
+        holoLight.position.set(1.2, 1.5, 0.3);
+        deskGroup.add(holoLight);
+
+        ufoGroup.add(deskGroup);
+
+        const deskHitbox = new THREE.Mesh(new THREE.BoxGeometry(4.5, 3, 2.5), hitboxMat);
+        deskHitbox.position.copy(deskGroup.position);
+        deskHitbox.position.y += 1;
+        deskHitbox.userData = { target: 'dashboard.html', title: 'DASHBOARD' };
+        ufoGroup.add(deskHitbox);
+        interactables.push(deskHitbox);
+
+
+        // B. THE ALIEN PILOT (Profile)
+        const pilotGroup = new THREE.Group();
+        pilotGroup.position.set(-4, 0.5, -2);
+        pilotGroup.rotation.y = Math.PI / 3;
+
+        // Ergonomic Captain's Chair (Curved)
+        const chairBase = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.6, 0.6, 32), matteMat(0x475569));
+        chairBase.position.y = 0.3; chairBase.castShadow = true;
+        const chairSeat = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 0.15, 32), matteMat(0x1e293b));
+        chairSeat.position.y = 0.65; chairSeat.castShadow = true;
+        const chairBack = new THREE.Mesh(new THREE.TorusGeometry(0.9, 0.2, 16, 32, Math.PI), matteMat(0x1e293b));
+        chairBack.position.set(0, 1.5, -0.9);
+        chairBack.rotation.y = Math.PI/2;
+        pilotGroup.add(chairBase, chairSeat, chairBack);
+
+        // Detailed Cute Alien Character
+        const alienSkin = matteMat(0x10b981); // Mint green
+        const suitMat = matteMat(0xf8fafc); // White spacesuit
+        const trimMat = metalMat(0xfab52b); // Gold accents
+
+        const charRig = new THREE.Group();
+        charRig.position.y = 0.75;
+        
+        // Suit Body (Rounded Capsule-like via stacked shapes)
+        const body = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.5, 0.8, 32), suitMat);
+        body.position.y = 0.6; body.castShadow = true;
+        const bodyTop = new THREE.Mesh(new THREE.SphereGeometry(0.45, 32, 16), suitMat);
+        bodyTop.position.y = 1.0; bodyTop.castShadow = true;
+        const bodyBot = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 16), suitMat);
+        bodyBot.position.y = 0.2; bodyBot.castShadow = true;
+        charRig.add(body, bodyTop, bodyBot);
+
+        // Spacesuit Backpack
+        const backpack = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.8, 0.4), metalMat(0x94a3b8));
+        backpack.position.set(0, 0.6, -0.6);
+        backpack.castShadow = true;
+        charRig.add(backpack);
+
+        // Arms
+        const armGeo = new THREE.CylinderGeometry(0.12, 0.1, 0.7, 16);
+        const armL = new THREE.Mesh(armGeo, suitMat);
+        armL.position.set(0.6, 0.6, 0.2); armL.rotation.x = Math.PI/3; armL.rotation.z = -Math.PI/8;
+        const armR = new THREE.Mesh(armGeo, suitMat);
+        armR.position.set(-0.6, 0.6, 0.2); armR.rotation.x = Math.PI/3; armR.rotation.z = Math.PI/8;
+        charRig.add(armL, armR);
+
+        // Suit Collar
+        const collar = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.1, 16, 32), trimMat);
+        collar.position.y = 1.1; collar.rotation.x = Math.PI/2;
+        charRig.add(collar);
+
+        // Head
+        const head = new THREE.Mesh(new THREE.SphereGeometry(0.55, 32, 32), alienSkin);
+        head.position.y = 1.6; head.castShadow = true;
+        charRig.add(head);
+
+        // Spacesuit Visor (Dark tinted glass band)
+        const visorMat = new THREE.MeshPhysicalMaterial({ color: 0x0f172a, metalness: 0.8, roughness: 0.1, clearcoat: 1.0 });
+        const visor = new THREE.Mesh(new THREE.SphereGeometry(0.57, 32, 16, 0, Math.PI*2, Math.PI/3.5, Math.PI/3), visorMat);
+        visor.position.y = 1.6;
+        visor.rotation.x = -Math.PI/8; // Tilt up slightly
+        charRig.add(visor);
+
+        // Cute Antennae
+        const antMat = metalMat(0x64748b);
+        const ant1 = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.4), antMat);
+        ant1.position.set(0.25, 2.15, -0.1); ant1.rotation.z = -Math.PI/6;
+        const antTip1 = new THREE.Mesh(new THREE.SphereGeometry(0.08), new THREE.MeshBasicMaterial({color: 0x3b82f6}));
+        antTip1.position.set(0.35, 2.3, -0.1);
+        
+        const ant2 = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.4), antMat);
+        ant2.position.set(-0.25, 2.15, -0.1); ant2.rotation.z = Math.PI/6;
+        const antTip2 = new THREE.Mesh(new THREE.SphereGeometry(0.08), new THREE.MeshBasicMaterial({color: 0x3b82f6}));
+        antTip2.position.set(-0.35, 2.3, -0.1);
+        charRig.add(ant1, antTip1, ant2, antTip2);
+
+        pilotGroup.add(charRig);
+        ufoGroup.add(pilotGroup);
+
+        // Pilot Hitbox
+        const pilotHitbox = new THREE.Mesh(new THREE.BoxGeometry(3, 4, 3), hitboxMat);
+        pilotHitbox.position.copy(pilotGroup.position);
+        pilotHitbox.position.y += 1.5;
+        pilotHitbox.userData = { target: 'profile.html', title: 'PROFILE' };
+        ufoGroup.add(pilotHitbox);
+        interactables.push(pilotHitbox);
+
+
+        // C. DATA ARCHIVE (Stories Behind) - Cylindrical Holographic Data Core
+        const archiveGroup = new THREE.Group();
+        archiveGroup.position.set(4, 0.5, -2);
+
+        // Core Base & Pillar
+        const coreBase = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.4, 0.4, 32), metalMat(0x334155));
+        coreBase.position.y = 0.2; coreBase.castShadow = true;
+        const corePillar = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 3.5, 32), metalMat(0x0f172a));
+        corePillar.position.y = 1.8;
+        
+        // Inner glowing glass tube
+        const glassMat = new THREE.MeshPhysicalMaterial({ color: 0x8b5cf6, transmission: 0.8, opacity: 1, metalness: 0, roughness: 0.1 });
+        const glassTube = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 3.2, 32), glassMat);
+        glassTube.position.y = 1.8;
+        archiveGroup.add(coreBase, corePillar, glassTube);
+
+        const coreLight = new THREE.PointLight(0x8b5cf6, 2, 5);
+        coreLight.position.y = 1.8;
+        archiveGroup.add(coreLight);
+
+        // Orbital Data Rings
+        for(let i=0; i<4; i++) {
+            const ringGroup = new THREE.Group();
+            ringGroup.position.y = 0.8 + (i * 0.7);
+            
+            // Physical ring
+            const ringGeo = new THREE.TorusGeometry(1.4, 0.05, 16, 64);
+            const ringMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, emissive: 0xa855f7, emissiveIntensity: Math.random() * 0.8 + 0.2 });
+            const ring = new THREE.Mesh(ringGeo, ringMat);
+            ring.rotation.x = Math.PI / 2;
+            
+            // Orbiting Data Node (small sphere on ring)
+            const node = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), new THREE.MeshBasicMaterial({color: 0xd946ef}));
+            node.position.set(1.4, 0, 0);
+            
+            ringGroup.add(ring, node);
+            archiveGroup.add(ringGroup);
+            
+            // Store for animation
+            animatedRings.push({ group: ringGroup, speed: (Math.random() > 0.5 ? 1 : -1) * (1 + i * 0.5) });
+        }
+
+        ufoGroup.add(archiveGroup);
+
+        // Archive Hitbox
+        const archiveHitbox = new THREE.Mesh(new THREE.BoxGeometry(3.5, 4.5, 3.5), hitboxMat);
+        archiveHitbox.position.copy(archiveGroup.position);
+        archiveHitbox.position.y += 1.8;
+        archiveHitbox.userData = { target: 'stories.html', title: 'STORIES' };
+        ufoGroup.add(archiveHitbox);
+        interactables.push(archiveHitbox);
+
+        // --- INTERACTION & LOGIC ---
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        const reticle = document.getElementById('target-reticle');
+        const retTitle = document.getElementById('reticle-title');
+        
+        let hoveredObject = null;
+        let isTransitioning = false;
+        let targetCameraPos = new THREE.Vector3();
+        let targetLookAt = new THREE.Vector3();
+
+        // Simulate Loading sequence
+        let loadProg = 0;
+        const loaderInt = setInterval(() => {
+            loadProg += Math.random() * 20;
+            document.getElementById('load-progress').style.width = Math.min(loadProg, 100) + '%';
+            if(loadProg >= 100) {
+                clearInterval(loaderInt);
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => document.getElementById('loader').remove(), 800);
+            }
+        }, 100);
+
+        window.addEventListener('mousemove', (e) => {
+            if(isTransitioning) return;
+
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(interactables);
+
+            if (intersects.length > 0) {
+                document.body.style.cursor = 'crosshair';
+                const hit = intersects[0].object;
+                
+                if (hoveredObject !== hit) {
+                    hoveredObject = hit;
+                    
+                    // Scale animation
+                    hit.scaleTarget = 1.05;
+
+                    // Update UI HUD
+                    retTitle.innerText = hit.userData.title;
+                    reticle.classList.add('active');
+                }
+                
+                // Pin HUD to 3D object screen coordinates
+                const vector = hit.position.clone();
+                vector.project(camera);
+                const x = (vector.x * .5 + .5) * window.innerWidth;
+                const y = (vector.y * -.5 + .5) * window.innerHeight;
+                reticle.style.left = `${x}px`;
+                reticle.style.top = `${y - 80}px`;
+
+            } else {
+                document.body.style.cursor = 'grab';
+                reticle.classList.remove('active');
+                if (hoveredObject) {
+                    hoveredObject.scaleTarget = 1.0;
+                    hoveredObject = null;
+                }
+            }
+        });
+
+        // Click to "Magnimize" (Zoom & Redirect)
+        window.addEventListener('click', () => {
+            if (hoveredObject && !isTransitioning) {
+                isTransitioning = true;
+                reticle.classList.remove('active');
+                
+                // Fade out UI and Fade in White Transition
+                document.getElementById('ui-layer').style.opacity = '0';
+                document.getElementById('transition-overlay').style.opacity = '1';
+                
+                // Calculate zoom target
+                const hitPos = hoveredObject.position.clone();
+                targetLookAt.copy(hitPos);
+                
+                // Move camera closer to the object, slightly elevated
+                targetCameraPos.copy(hitPos).add(new THREE.Vector3(0, 3, 6)); 
+                
+                // Disable orbit controls
+                controls.enabled = false;
+
+                // Redirect after cinematic zoom
+                setTimeout(() => {
+                    window.location.href = hoveredObject.userData.target;
+                }, 1200);
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- GAME LOOP ---
+        const clock = new THREE.Clock();
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = clock.getElapsedTime();
+            const delta = clock.getDelta();
+
+            // Passive Environment Animation
+            spaceGroup.rotation.y = time * 0.005; // Slower majestic rotation
+            ufoGroup.position.y = Math.sin(time * 1.5) * 0.2; // Hover effect
+            if(holoBaseRef) holoBaseRef.rotation.y = time; // Spinning projector
+
+            // Satellite Animation
+            satelliteGroup.position.x = Math.cos(time * 0.2) * 60;
+            satelliteGroup.position.z = Math.sin(time * 0.2) * 60 - 50;
+            satelliteGroup.position.y = Math.sin(time * 0.3) * 10 + 20;
+            satelliteGroup.rotation.y = time * 0.5;
+            satelliteGroup.rotation.z = time * 0.2;
+
+            // Archive Data Rings Animation
+            animatedRings.forEach(item => {
+                item.group.rotation.y = time * item.speed;
+                // Add a slight wobble to the rings
+                item.group.rotation.z = Math.sin(time * 2 + item.speed) * 0.1;
+            });
+
+            // Hover Object Scale Lerp
+            interactables.forEach(obj => {
+                if(obj.scaleTarget) {
+                    // We actually scale the parent group visually, not the hitbox
+                    const visualGroup = (obj === deskHitbox) ? deskGroup : (obj === pilotHitbox) ? pilotGroup : archiveGroup;
+                    visualGroup.scale.lerp(new THREE.Vector3(obj.scaleTarget, obj.scaleTarget, obj.scaleTarget), 0.1);
+                }
+            });
+
+            // Cinematic Click Transition (Lerp Camera)
+            if(isTransitioning) {
+                camera.position.lerp(targetCameraPos, 0.05);
+                controls.target.lerp(targetLookAt, 0.08);
+            }
+
+            if(!isTransitioning) controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+>>>>>>> 762777d900dfb854d22e7a162452dcf561167c25
 </html>
